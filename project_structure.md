@@ -29,7 +29,8 @@ sakan/
 │   ├── actions/                                   # Next.js Server Actions, grouped by domain
 │   │   ├── auth/
 │   │   │   └── index.ts                           # requestOtp(), verifyOtp(), signOut() – OTP auth Server Actions
-│   │   ├── onboarding/                            # Onboarding Server Actions (profile upsert per step) – Phase 6
+│   │   ├── onboarding/
+│   │   │   └── index.ts                           # saveOnboardingStep1-4() – partial-upsert Server Actions per wizard step; step 4 redirects to dashboard
 │   │   └── chat/                                  # Chat Server Actions (create chat, send message) – Phase 8
 │   │
 │   ├── app/
@@ -51,9 +52,9 @@ sakan/
 │   │       │       └── loading.tsx                # Login loading skeleton
 │   │       │
 │   │       ├── (onboarding)/                      # Route group – onboarding layout with progress bar
-│   │       │   ├── layout.tsx                     # Onboarding layout – progress bar slot (Phase 6)
+│   │       │   ├── layout.tsx                     # Onboarding layout – flex column wrapper; progress bar lives inside wizard
 │   │       │   └── onboarding/
-│   │       │       ├── page.tsx                   # Onboarding page scaffold – 4-step wizard in Phase 6
+│   │       │       ├── page.tsx                   # Onboarding page – fetches existing profile/preferences, redirects if complete, renders OnboardingWizard
 │   │       │       └── loading.tsx                # Onboarding loading skeleton
 │   │       │
 │   │       └── (protected)/                       # Route group – authenticated routes, nav bar
@@ -65,6 +66,13 @@ sakan/
 │   ├── components/                                # Reusable UI components, grouped by domain
 │   │   ├── auth/
 │   │   │   └── OtpForm.tsx                        # Two-step OTP form – email step → code step; uses useActionState with Server Actions
+│   │   ├── onboarding/
+│   │   │   ├── OnboardingWizard.tsx               # Client Component – manages current step state, calls Server Actions via useTransition
+│   │   │   ├── StepProgressBar.tsx                # Step progress indicator – dots + connectors; aria-current on active step
+│   │   │   ├── Step1Form.tsx                      # Core Identity form – name, gender (radio), dob, nationality, country, city
+│   │   │   ├── Step2Form.tsx                      # Physical & Health form – height, weight, skin color, health, smoking (all optional)
+│   │   │   ├── Step3Form.tsx                      # Background & Lifestyle form – education, job, marital status, children, religious, appearance
+│   │   │   └── Step4Form.tsx                      # Preferences & Bios form – about me, age range, accepted statuses/education, partner description
 │   │   └── ui/
 │   │       └── LocaleSwitcher.tsx                 # EN | عربي toggle – client component using next-intl Link and useLocale
 │   │
@@ -94,8 +102,11 @@ sakan/
     │   ├── error-boundary.test.tsx                # Tests for <locale>/error.tsx (renders, retry button, console.error)
     │   ├── locale-layout.test.tsx                 # Tests for <locale>/layout.tsx (lang/dir attributes, notFound guard)
 │   ├── locale-switcher.test.tsx               # Tests for LocaleSwitcher (renders locales, aria-current, accessible nav)
-│   └── otp-form.test.tsx                      # Tests for OtpForm (email step, OTP step, error states, resend flow)
+│   ├── otp-form.test.tsx                      # Tests for OtpForm (email step, OTP step, error states, resend flow)
+│   └── onboarding-wizard.test.tsx             # Tests for OnboardingWizard (step rendering, navigation, server error display)
     └── unit/
+        ├── actions/
+        │   └── onboarding.test.ts             # Tests for saveOnboardingStep1-4 (auth guard, validation, Supabase mocks, redirect)
         └── lib/
             ├── i18n/
             │   └── direction.test.ts              # Unit tests for getLocaleDir()
@@ -109,7 +120,8 @@ sakan/
             │   ├── cn.test.ts                     # Unit tests for cn()
             │   └── env.test.ts                    # Unit tests for env loader
             └── validation/
-                └── auth.test.ts                   # Unit tests for emailSchema and otpSchema
+                ├── auth.test.ts                   # Unit tests for emailSchema and otpSchema
+                └── onboarding.test.ts             # Unit tests for step1–step4 schemas (required fields, optional handling, refinements)
 ```
 
 ## Phase completion status
@@ -122,7 +134,7 @@ sakan/
 | 3 | ✅ Complete | i18n infrastructure (Arabic/English) |
 | 4 | ✅ Complete | Supabase integration and typed data contracts |
 | 5 | ✅ Complete | Authentication (OTP flow) |
-| 6 | Planned | Multi-step onboarding wizard |
+| 6 | ✅ Complete | Multi-step onboarding wizard |
 | 7 | Planned | Match dashboard and filtering |
 | 8 | Planned | Real-time chat |
 | 9 | Planned | Premium UI/UX polish and accessibility hardening |
