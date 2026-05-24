@@ -29,7 +29,7 @@ function Field({
 }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label htmlFor={id} className="text-sm font-medium text-stone-700">
+      <label htmlFor={id} className="text-sm text-slate-500">
         {label}
       </label>
       {children}
@@ -83,12 +83,10 @@ function EmailStep({
           aria-invalid={!!state.fieldError}
           disabled={isPending}
           className={cn(
-            "w-full rounded-md border bg-white px-3.5 py-2.5 text-sm text-stone-900",
-            "placeholder:text-stone-400 outline-none",
-            "focus-visible:ring-2 focus-visible:ring-stone-400 focus-visible:ring-offset-1",
+            "w-full px-4 py-3 rounded-xl border border-slate-200 bg-transparent text-slate-900",
+            "placeholder:text-slate-400 focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition-all",
             "disabled:opacity-50 disabled:cursor-not-allowed",
-            "transition-shadow duration-150",
-            state.fieldError ? "border-red-400" : "border-stone-200 hover:border-stone-300"
+            state.fieldError && "border-red-500 focus:border-red-500 focus:ring-red-500"
           )}
         />
       </Field>
@@ -103,11 +101,8 @@ function EmailStep({
         type="submit"
         disabled={isPending}
         className={cn(
-          "w-full rounded-md bg-stone-900 px-4 py-2.5 text-sm font-medium text-white",
-          "hover:bg-stone-700 focus-visible:outline focus-visible:outline-2",
-          "focus-visible:outline-offset-2 focus-visible:outline-stone-900",
-          "disabled:opacity-50 disabled:cursor-not-allowed",
-          "transition-colors duration-150"
+          "w-full py-3 mt-4 rounded-xl bg-slate-900 text-white font-medium hover:bg-slate-800 transition-colors",
+          "disabled:opacity-50 disabled:cursor-not-allowed"
         )}
       >
         {isPending ? t("send_otp") + "…" : t("send_otp")}
@@ -148,7 +143,7 @@ function OtpStep({
       {/* Hidden email so the server action has it */}
       <input type="hidden" name="email" value={email} />
 
-      <p className="text-sm text-stone-500">{sentMessage}</p>
+      <p className="text-sm text-slate-500">{sentMessage}</p>
 
       <Field
         id="token"
@@ -168,12 +163,10 @@ function OtpStep({
           aria-invalid={!!state.error}
           disabled={isPending}
           className={cn(
-            "w-full rounded-md border bg-white px-3.5 py-2.5 text-sm text-stone-900 tracking-widest",
-            "placeholder:text-stone-400 placeholder:tracking-normal outline-none",
-            "focus-visible:ring-2 focus-visible:ring-stone-400 focus-visible:ring-offset-1",
+            "w-full px-4 py-3 rounded-xl border border-slate-200 bg-transparent text-slate-900 tracking-widest",
+            "placeholder:text-slate-400 placeholder:tracking-normal focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition-all",
             "disabled:opacity-50 disabled:cursor-not-allowed",
-            "transition-shadow duration-150",
-            state.error ? "border-red-400" : "border-stone-200 hover:border-stone-300"
+            state.error && "border-red-500 focus:border-red-500 focus:ring-red-500"
           )}
         />
       </Field>
@@ -182,11 +175,8 @@ function OtpStep({
         type="submit"
         disabled={isPending}
         className={cn(
-          "w-full rounded-md bg-stone-900 px-4 py-2.5 text-sm font-medium text-white",
-          "hover:bg-stone-700 focus-visible:outline focus-visible:outline-2",
-          "focus-visible:outline-offset-2 focus-visible:outline-stone-900",
-          "disabled:opacity-50 disabled:cursor-not-allowed",
-          "transition-colors duration-150"
+          "w-full py-3 mt-4 rounded-xl bg-slate-900 text-white font-medium hover:bg-slate-800 transition-colors",
+          "disabled:opacity-50 disabled:cursor-not-allowed"
         )}
       >
         {isPending ? t("verify_otp") + "…" : t("verify_otp")}
@@ -197,7 +187,7 @@ function OtpStep({
         onClick={onResend}
         disabled={isPending}
         className={cn(
-          "text-sm text-stone-500 underline-offset-4 hover:underline hover:text-stone-700",
+          "text-sm text-slate-500 underline-offset-4 hover:underline hover:text-slate-700",
           "disabled:opacity-50 disabled:cursor-not-allowed",
           "transition-colors duration-150"
         )}
