@@ -1,14 +1,19 @@
-import { getTranslations } from "next-intl/server";
+import { getLocale } from "next-intl/server";
+import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
 
-// Home page – Phase 5 will add auth-state-based routing here.
+// Home page – routes authenticated users to the dashboard and guests to login.
 export default async function HomePage() {
-  const t = await getTranslations("common");
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  return (
-    <main className="flex-1 flex items-center justify-center px-4">
-      <h1 className="text-3xl font-semibold tracking-tight text-stone-800">
-        {t("app_name")}
-      </h1>
-    </main>
-  );
+  const locale = await getLocale();
+
+  if (user) {
+    redirect(`/${locale}/dashboard`);
+  } else {
+    redirect(`/${locale}/login`);
+  }
 }
