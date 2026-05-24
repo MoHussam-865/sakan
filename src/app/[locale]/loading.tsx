@@ -6,7 +6,7 @@ export default function Loading() {
       role="status"
       aria-label="Loading"
     >
-      <div className="h-8 w-8 rounded-full border-2 border-stone-200 border-t-stone-600 animate-spin" />
+      <div className="h-8 w-8 rounded-full border-2 border-slate-200 border-t-slate-600 animate-spin" />
     </div>
   );
 }

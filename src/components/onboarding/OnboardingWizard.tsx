@@ -104,7 +104,7 @@ export function OnboardingWizard({ existingProfile, existingPreferences }: Props
   }
 
   return (
-    <div className="w-full max-w-lg flex flex-col gap-8">
+    <div className="bg-white p-8 rounded-2xl border border-slate-100 shadow-sm w-full max-w-lg flex flex-col gap-8">
       {/* Progress */}
       <StepProgressBar
         currentStep={step}
@@ -114,10 +114,10 @@ export function OnboardingWizard({ existingProfile, existingPreferences }: Props
 
       {/* Step heading */}
       <div>
-        <p className="text-xs uppercase tracking-widest text-stone-400 mb-1">
+        <p className="text-xs uppercase tracking-widest text-slate-500 mb-1">
           {t("step_of", { current: step, total: TOTAL_STEPS })}
         </p>
-        <h2 className="text-lg font-semibold text-stone-800">
+        <h2 className="text-2xl font-semibold tracking-tight text-slate-900">
           {stepLabels[step - 1]}
         </h2>
       </div>

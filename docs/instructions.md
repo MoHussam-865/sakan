@@ -29,9 +29,14 @@ Code is NEVER considered complete without tests. You MUST generate or update tes
 ## 5. ANTI-AI UI/UX & Premium Styling (CRITICAL)
 Avoid the generic, templated "AI-generated look". We are building a premium, editorial minimalist platform.
 * **Tailwind CSS:** Use Tailwind utility classes. For complex conditional classes, use `clsx` and `tailwind-merge` (the `cn()` utility pattern).
-* **Accessible Warmth Palette:** Rely on warm neutral palettes (e.g., deep charcoal for text, off-white/warm ivory backgrounds, and muted earth tones). Avoid default bright blues/purples.
-* **Container-less Grouping:** Group related elements using generous whitespace and ultra-thin, subtle dividers (`border-slate-200`) instead of heavy boxed cards (`shadow-lg`). Remove unnecessary borders.
-* **Micro-interactions:** Add subtle hover states (`hover:bg-slate-50 transition-colors`), custom slim scrollbars, and fluid state changes (using Framer Motion or simple CSS transitions).
+* **Accessible Warmth Palette:** Rely on warm neutral palettes. 
+  * Backgrounds: `bg-[#FAFAFA]` or `bg-stone-50` for pages.
+  * Cards/Forms: `bg-white`, very subtle borders (`border-slate-100` or `border-slate-200`), and `shadow-sm`. Do NOT use pitch-black backgrounds.
+  * Typography: `text-slate-900` for high-contrast primary text, `text-slate-500` for secondary text/labels. NEVER use low-contrast text on pitch-black for forms!
+  * Inputs: Consistent, pristine styling like `w-full px-4 py-3 rounded-xl border border-slate-200 bg-transparent text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition-all`.
+  * Buttons: Solid, premium action blocks like `bg-slate-900 text-white font-medium hover:bg-slate-800 transition-colors`.
+* **Container-less Grouping:** Group related elements using generous whitespace and ultra-thin, subtle dividers instead of heavy boxed cards (`shadow-lg`). Remove overly thick borders.
+* **Micro-interactions:** Add subtle hover states (`hover:bg-slate-50 transition-colors`), custom slim scrollbars, and fluid state changes.
 
 ## 6. Web Specifics & Accessibility
 * **Responsive Layouts:** Design mobile-first. Use Tailwind breakpoints (`sm:`, `md:`, `lg:`) to scale layouts smoothly to desktop. Avoid fixed widths that break on smaller screens.

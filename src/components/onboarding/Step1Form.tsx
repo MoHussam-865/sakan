@@ -25,7 +25,7 @@ function Field({
 }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label htmlFor={id} className="text-sm text-stone-500">
+      <label htmlFor={id} className="text-sm text-slate-500">
         {label}
         {required && (
           <span className="text-red-400 ms-0.5" aria-hidden>
@@ -49,8 +49,8 @@ function Field({
 
 function inputCls(hasError?: boolean) {
   return cn(
-    "w-full px-4 py-3 rounded-xl border border-slate-200 bg-transparent text-stone-900",
-    "placeholder:text-stone-400 focus:outline-none focus:border-stone-900 focus:ring-1 focus:ring-stone-900 transition-all",
+    "w-full px-4 py-3 rounded-xl border border-slate-200 bg-transparent text-slate-900",
+    "placeholder:text-slate-400 focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition-all",
     "disabled:opacity-50 disabled:cursor-not-allowed",
     hasError && "border-red-400 focus:border-red-500 focus:ring-red-400"
   );
@@ -134,8 +134,8 @@ export function Step1Form({ defaultValues, isPending, onSubmit }: Props) {
               className={cn(
                 "flex-1 text-center px-4 py-3 rounded-xl border cursor-pointer text-sm font-medium transition-colors",
                 selectedGender === g
-                  ? "bg-stone-900 text-white border-stone-900"
-                  : "border-slate-200 text-stone-600 hover:border-stone-400"
+                  ? "bg-slate-900 text-white border-slate-900"
+                  : "border-slate-200 text-slate-600 hover:border-slate-400"
               )}
             >
               <input
@@ -245,8 +245,7 @@ export function Step1Form({ defaultValues, isPending, onSubmit }: Props) {
         type="submit"
         disabled={isPending}
         className={cn(
-          "w-full py-3 mt-2 rounded-xl bg-stone-900 text-white font-medium",
-          "hover:bg-stone-800 transition-colors",
+          "w-full py-3 mt-4 rounded-xl bg-slate-900 text-white font-medium hover:bg-slate-800 transition-colors",
           "disabled:opacity-50 disabled:cursor-not-allowed"
         )}
       >

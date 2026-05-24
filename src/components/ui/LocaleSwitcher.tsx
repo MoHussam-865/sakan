@@ -23,7 +23,7 @@ export default function LocaleSwitcher() {
             <li key={locale} className="flex items-center">
               {i > 0 && (
                 <span
-                  className="mx-2 text-stone-300 select-none"
+                  className="mx-2 text-slate-300 select-none"
                   aria-hidden="true"
                 >
                   |
@@ -36,8 +36,8 @@ export default function LocaleSwitcher() {
                 className={cn(
                   "text-xs font-medium tracking-wide uppercase transition-colors",
                   isActive
-                    ? "text-stone-900 cursor-default pointer-events-none"
-                    : "text-stone-400 hover:text-stone-700"
+                    ? "text-slate-900 cursor-default pointer-events-none"
+                    : "text-slate-400 hover:text-slate-700"
                 )}
               >
                 {t(locale)}

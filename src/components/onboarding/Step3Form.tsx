@@ -26,7 +26,7 @@ function Field({
 }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label htmlFor={id} className="text-sm text-stone-500">
+      <label htmlFor={id} className="text-sm text-slate-500">
         {label}
         {required && (
           <span className="text-red-400 ms-0.5" aria-hidden>
@@ -46,8 +46,8 @@ function Field({
 
 function inputCls(hasError?: boolean) {
   return cn(
-    "w-full px-4 py-3 rounded-xl border border-slate-200 bg-transparent text-stone-900",
-    "placeholder:text-stone-400 focus:outline-none focus:border-stone-900 focus:ring-1 focus:ring-stone-900 transition-all",
+    "w-full px-4 py-3 rounded-xl border border-slate-200 bg-transparent text-slate-900",
+    "placeholder:text-slate-400 focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition-all",
     "disabled:opacity-50 disabled:cursor-not-allowed",
     hasError && "border-red-400 focus:border-red-500 focus:ring-red-400"
   );
@@ -171,11 +171,11 @@ export function Step3Form({
           type="checkbox"
           disabled={isPending}
           {...register("has_children")}
-          className="h-4 w-4 rounded border-slate-200 accent-stone-900 cursor-pointer"
+          className="h-4 w-4 rounded border-slate-200 accent-slate-900 cursor-pointer"
         />
         <label
           htmlFor="has_children"
-          className="text-sm text-stone-600 cursor-pointer"
+          className="text-sm text-slate-600 cursor-pointer"
         >
           {t("has_children_label")}
         </label>
@@ -183,7 +183,7 @@ export function Step3Form({
 
       {/* Children details – conditional */}
       {hasChildren && (
-        <div className="flex flex-col gap-4 ps-2 border-s-2 border-stone-100">
+        <div className="flex flex-col gap-4 ps-2 border-s-2 border-slate-100">
           <Field
             id="children_count"
             label={t("children_count_label")}
@@ -277,14 +277,14 @@ export function Step3Form({
       )}
 
       {/* Navigation */}
-      <div className="flex gap-3 mt-2">
+      <div className="flex gap-3 mt-4">
         <button
           type="button"
           onClick={onBack}
           disabled={isPending}
           className={cn(
-            "flex-1 py-3 rounded-xl border border-slate-200 text-stone-600 font-medium",
-            "hover:border-stone-400 transition-colors",
+            "flex-1 py-3 rounded-xl border border-slate-200 text-slate-600 font-medium hover:bg-slate-50",
+            "transition-colors",
             "disabled:opacity-50 disabled:cursor-not-allowed"
           )}
         >
@@ -294,8 +294,7 @@ export function Step3Form({
           type="submit"
           disabled={isPending}
           className={cn(
-            "flex-1 py-3 rounded-xl bg-stone-900 text-white font-medium",
-            "hover:bg-stone-800 transition-colors",
+            "flex-1 py-3 rounded-xl bg-slate-900 text-white font-medium hover:bg-slate-800 transition-colors",
             "disabled:opacity-50 disabled:cursor-not-allowed"
           )}
         >
