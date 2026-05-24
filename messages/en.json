@@ -112,7 +112,10 @@
     "title": "Profile",
     "edit": "Edit profile",
     "report": "Report user",
-    "age": "{age} years old"
+    "age": "{age} years old",
+    "back_to_matches": "Back to matches",
+    "not_found": "Profile not found",
+    "not_found_hint": "This profile may have been removed."
   },
   "chat": {
     "title": "Messages",

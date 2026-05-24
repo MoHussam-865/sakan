@@ -185,3 +185,14 @@ export const step4Schema = z
   });
 
 export type Step4Input = z.infer<typeof step4Schema>;
+
+// ---------------------------------------------------------------------------
+// Full onboarding payload (all steps combined)
+// ---------------------------------------------------------------------------
+
+export const fullOnboardingSchema = step1Schema
+  .and(step2Schema)
+  .and(step3Schema)
+  .and(step4Schema);
+
+export type FullOnboardingInput = z.infer<typeof fullOnboardingSchema>;

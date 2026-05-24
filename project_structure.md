@@ -66,6 +66,9 @@ sakan/
 │   ├── components/                                # Reusable UI components, grouped by domain
 │   │   ├── auth/
 │   │   │   └── OtpForm.tsx                        # Two-step OTP form – email step → code step; uses useActionState with Server Actions
+│   │   ├── matches/
+│   │   │   ├── MatchCard.tsx                      # Client Component – profile summary card; links to detail view, shows age, city, education
+│   │   │   └── MatchEmptyState.tsx                # Client Component – empty state shown when the preference query returns no results
 │   │   ├── onboarding/
 │   │   │   ├── OnboardingWizard.tsx               # Client Component – manages current step state, calls Server Actions via useTransition
 │   │   │   ├── StepProgressBar.tsx                # Step progress indicator – dots + connectors; aria-current on active step
@@ -74,7 +77,8 @@ sakan/
 │   │   │   ├── Step3Form.tsx                      # Background & Lifestyle form – education, job, marital status, children, religious, appearance
 │   │   │   └── Step4Form.tsx                      # Preferences & Bios form – about me, age range, accepted statuses/education, partner description
 │   │   └── ui/
-│   │       └── LocaleSwitcher.tsx                 # EN | عربي toggle – client component using next-intl Link and useLocale
+│   │       ├── LocaleSwitcher.tsx                 # EN | عربي toggle – client component using next-intl Link and useLocale
+│   │       └── NavBar.tsx                         # Client Component – sticky top nav bar; active link detection via usePathname, sign-out form action
 │   │
 │   ├── lib/                                       # Shared business logic and utilities
 │   │   ├── i18n/
@@ -88,10 +92,12 @@ sakan/
 │   │   │       ├── chats.ts                       # getChatsByUserId(), getChatById() – chat read queries
 │   │   │       └── messages.ts                    # getMessagesByChatId() – message read query
 │   │   ├── validation/
-│   │   │   └── auth.ts                            # emailSchema + otpSchema – Zod validation for OTP auth form steps
+│   │   │   ├── auth.ts                            # emailSchema + otpSchema – Zod validation for OTP auth form steps
+│   │   │   └── onboarding.ts                      # step1-4 Zod schemas for onboarding wizard validation
 │   │   └── utils/
 │   │       ├── cn.ts                              # cn() helper – merges Tailwind classes via clsx + tailwind-merge
-│   │       └── env.ts                             # Typed, validated environment variable accessor
+│   │       ├── env.ts                             # Typed, validated environment variable accessor
+│   │       └── matches.ts                         # calculateAge(), dobRangeFromAgeRange() – date/age helpers for the match query pipeline
 │   │
 │   └── types/
 │       └── supabase.ts                            # Hand-authored Database type, all Row/Insert/Update types and enums
@@ -99,9 +105,10 @@ sakan/
 └── tests/
     ├── setup.ts                                   # Jest global setup – imports @testing-library/jest-dom
     ├── components/
-    │   ├── error-boundary.test.tsx                # Tests for <locale>/error.tsx (renders, retry button, console.error)
-    │   ├── locale-layout.test.tsx                 # Tests for <locale>/layout.tsx (lang/dir attributes, notFound guard)
+│   ├── error-boundary.test.tsx                # Tests for <locale>/error.tsx (renders, retry button, console.error)
+│   ├── locale-layout.test.tsx                 # Tests for <locale>/layout.tsx (lang/dir attributes, notFound guard)
 │   ├── locale-switcher.test.tsx               # Tests for LocaleSwitcher (renders locales, aria-current, accessible nav)
+│   ├── match-feed.test.tsx                    # Tests for MatchCard (name/age/city/edu/link) and MatchEmptyState (empty state text)
 │   ├── otp-form.test.tsx                      # Tests for OtpForm (email step, OTP step, error states, resend flow)
 │   └── onboarding-wizard.test.tsx             # Tests for OnboardingWizard (step rendering, navigation, server error display)
     └── unit/
@@ -118,7 +125,8 @@ sakan/
             │       └── messages.test.ts           # Mocked tests for getMessagesByChatId()
             ├── utils/
             │   ├── cn.test.ts                     # Unit tests for cn()
-            │   └── env.test.ts                    # Unit tests for env loader
+            │   ├── env.test.ts                    # Unit tests for env loader
+            │   └── matches.test.ts                # Unit tests for calculateAge() and dobRangeFromAgeRange()
             └── validation/
                 ├── auth.test.ts                   # Unit tests for emailSchema and otpSchema
                 └── onboarding.test.ts             # Unit tests for step1–step4 schemas (required fields, optional handling, refinements)
@@ -135,7 +143,7 @@ sakan/
 | 4 | ✅ Complete | Supabase integration and typed data contracts |
 | 5 | ✅ Complete | Authentication (OTP flow) |
 | 6 | ✅ Complete | Multi-step onboarding wizard |
-| 7 | Planned | Match dashboard and filtering |
+| 7 | ✅ Complete | Match dashboard and filtering |
 | 8 | Planned | Real-time chat |
 | 9 | Planned | Premium UI/UX polish and accessibility hardening |
 | 10 | Planned | Quality gates, CI, and release readiness |

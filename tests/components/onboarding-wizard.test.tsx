@@ -1,7 +1,12 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { OnboardingWizard } from "@/components/onboarding/OnboardingWizard";
-import type { Profile, PartnerPreference } from "@/types/supabase";
+import type { PartnerPreference, Profile } from "@/types/supabase";
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// Use var to avoid TDZ errors when jest.mock factory is hoisted
+// eslint-disable-next-line no-var
+var mockFinalizeOnboarding: jest.Mock;
 
 // ---------------------------------------------------------------------------
 // Mocks
@@ -38,13 +43,13 @@ jest.mock("next-intl", () => ({
       hijab_label: "Hijab status",
       beard_label: "Beard",
       about_me_label: "About me",
-      about_me_placeholder: "Tell matches about yourself…",
+      about_me_placeholder: "Tell matches about yourself...",
       min_age_label: "Minimum age",
       max_age_label: "Maximum age",
       accepted_marital_statuses_label: "Accepted marital statuses",
       accepted_education_levels_label: "Accepted education levels",
       partner_description_label: "Partner description",
-      partner_description_placeholder: "Describe your ideal partner…",
+      partner_description_placeholder: "Describe your ideal partner...",
       name_required: "Full name is required",
       gender_required: "Please select your gender",
       dob_required: "Date of birth is required",
@@ -55,30 +60,21 @@ jest.mock("next-intl", () => ({
       city_required: "City is required",
       save_failed: "Failed to save. Please try again.",
       auth_required: "Please sign in to continue.",
+      next: "Next",
+      back: "Back",
+      submit: "Submit",
     };
     return map[key] ?? key;
   },
 }));
 
 jest.mock("@/actions/onboarding", () => ({
-  saveOnboardingStep1: jest.fn(),
-  saveOnboardingStep2: jest.fn(),
-  saveOnboardingStep3: jest.fn(),
-  saveOnboardingStep4: jest.fn(),
+  finalizeOnboarding: (...args: any[]) => mockFinalizeOnboarding(...args),
 }));
 
 jest.mock("@/lib/utils/cn", () => ({
   cn: (...args: string[]) => args.filter(Boolean).join(" "),
 }));
-
-// React useTransition stub: immediately invokes the callback
-jest.mock("react", () => {
-  const actual = jest.requireActual("react");
-  return {
-    ...actual,
-    useTransition: () => [false, (fn: () => void) => fn()],
-  };
-});
 
 // ---------------------------------------------------------------------------
 // Fixtures
@@ -124,15 +120,26 @@ const preferencesFixture: PartnerPreference = {
   updated_at: "2025-01-01T00:00:00Z",
 };
 
+beforeEach(() => {
+  mockFinalizeOnboarding = jest.fn();
+});
+
+async function fillRequiredStep1(user: ReturnType<typeof userEvent.setup>) {
+  await user.type(screen.getByLabelText(/full name/i), "Ali Al-Mansouri");
+  await user.click(screen.getByDisplayValue("male"));
+  await user.type(screen.getByLabelText(/date of birth/i), "1990-06-15");
+  await user.type(screen.getByLabelText(/nationality/i), "Saudi");
+  await user.type(screen.getByLabelText(/country/i), "Saudi Arabia");
+  await user.type(screen.getByLabelText(/city/i), "Riyadh");
+}
+
 // ---------------------------------------------------------------------------
 // Tests
 // ---------------------------------------------------------------------------
 
 describe("OnboardingWizard", () => {
   it("starts at step 1 when no profile exists", () => {
-    render(
-      <OnboardingWizard existingProfile={null} existingPreferences={null} />
-    );
+    render(<OnboardingWizard existingProfile={null} existingPreferences={null} />);
     expect(screen.getByText("Step 1 of 4")).toBeInTheDocument();
     expect(screen.getByText("Core Identity")).toBeInTheDocument();
     expect(screen.getByRole("textbox", { name: /full name/i })).toBeInTheDocument();
@@ -140,10 +147,7 @@ describe("OnboardingWizard", () => {
 
   it("starts at step 4 when profile exists but no preferences", () => {
     render(
-      <OnboardingWizard
-        existingProfile={profileFixture}
-        existingPreferences={null}
-      />
+      <OnboardingWizard existingProfile={profileFixture} existingPreferences={null} />
     );
     expect(screen.getByText("Step 4 of 4")).toBeInTheDocument();
     expect(screen.getByText("Preferences")).toBeInTheDocument();
@@ -156,97 +160,39 @@ describe("OnboardingWizard", () => {
         existingPreferences={preferencesFixture}
       />
     );
-    // Page handles redirect; wizard still defaults to step 1 in this case
     expect(screen.getByText("Step 1 of 4")).toBeInTheDocument();
   });
 
   it("renders the step progress bar", () => {
-    render(
-      <OnboardingWizard existingProfile={null} existingPreferences={null} />
-    );
+    render(<OnboardingWizard existingProfile={null} existingPreferences={null} />);
     expect(
       screen.getByRole("navigation", { name: "Onboarding progress" })
     ).toBeInTheDocument();
   });
 
   it("shows step 1 form with required fields", () => {
-    render(
-      <OnboardingWizard existingProfile={null} existingPreferences={null} />
-    );
+    render(<OnboardingWizard existingProfile={null} existingPreferences={null} />);
     expect(screen.getByLabelText(/full name/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/date of birth/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/nationality/i)).toBeInTheDocument();
   });
 
-  it("advances to step 2 after successful step 1 save", async () => {
-    const { saveOnboardingStep1 } = jest.requireMock("@/actions/onboarding");
-    saveOnboardingStep1.mockResolvedValue({ success: true });
-
-    render(
-      <OnboardingWizard existingProfile={null} existingPreferences={null} />
-    );
+  it("advances to step 2 locally without calling finalize action", async () => {
+    render(<OnboardingWizard existingProfile={null} existingPreferences={null} />);
 
     const user = userEvent.setup();
-
-    // Fill in required fields
-    await user.type(screen.getByLabelText(/full name/i), "Ali Al-Mansouri");
-
-    // Select gender
-    const maleRadio = screen.getByDisplayValue("male");
-    await user.click(maleRadio);
-
-    await user.type(screen.getByLabelText(/date of birth/i), "1990-06-15");
-    await user.type(screen.getByLabelText(/nationality/i), "Saudi");
-    await user.type(screen.getByLabelText(/country/i), "Saudi Arabia");
-    await user.type(screen.getByLabelText(/city/i), "Riyadh");
-
+    await fillRequiredStep1(user);
     await user.click(screen.getByRole("button", { name: /next/i }));
 
-    // Should advance to step 2
     expect(await screen.findByText("Step 2 of 4")).toBeInTheDocument();
-  });
-
-  it("shows a server error message when save fails", async () => {
-    const { saveOnboardingStep1 } = jest.requireMock("@/actions/onboarding");
-    saveOnboardingStep1.mockResolvedValue({ error: "save_failed" });
-
-    render(
-      <OnboardingWizard existingProfile={null} existingPreferences={null} />
-    );
-
-    const user = userEvent.setup();
-    await user.type(screen.getByLabelText(/full name/i), "Ali Al-Mansouri");
-    const maleRadio = screen.getByDisplayValue("male");
-    await user.click(maleRadio);
-    await user.type(screen.getByLabelText(/date of birth/i), "1990-06-15");
-    await user.type(screen.getByLabelText(/nationality/i), "Saudi");
-    await user.type(screen.getByLabelText(/country/i), "Saudi Arabia");
-    await user.type(screen.getByLabelText(/city/i), "Riyadh");
-
-    await user.click(screen.getByRole("button", { name: /next/i }));
-
-    expect(
-      await screen.findByText("Failed to save. Please try again.")
-    ).toBeInTheDocument();
-    // Still on step 1
-    expect(screen.getByText("Step 1 of 4")).toBeInTheDocument();
+    expect(mockFinalizeOnboarding).not.toHaveBeenCalled();
   });
 
   it("goes back to step 1 from step 2", async () => {
-    const { saveOnboardingStep1 } = jest.requireMock("@/actions/onboarding");
-    saveOnboardingStep1.mockResolvedValue({ success: true });
-
-    render(
-      <OnboardingWizard existingProfile={null} existingPreferences={null} />
-    );
+    render(<OnboardingWizard existingProfile={null} existingPreferences={null} />);
 
     const user = userEvent.setup();
-    await user.type(screen.getByLabelText(/full name/i), "Ali Al-Mansouri");
-    await user.click(screen.getByDisplayValue("male"));
-    await user.type(screen.getByLabelText(/date of birth/i), "1990-06-15");
-    await user.type(screen.getByLabelText(/nationality/i), "Saudi");
-    await user.type(screen.getByLabelText(/country/i), "Saudi Arabia");
-    await user.type(screen.getByLabelText(/city/i), "Riyadh");
+    await fillRequiredStep1(user);
     await user.click(screen.getByRole("button", { name: /next/i }));
 
     await screen.findByText("Step 2 of 4");

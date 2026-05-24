@@ -38,6 +38,7 @@ function buildMockClient(result: { data: unknown; error: null | Error }) {
     is: jest.fn().mockReturnThis(),
     gte: jest.fn().mockReturnThis(),
     lte: jest.fn().mockReturnThis(),
+    in: jest.fn().mockReturnThis(),
     order: jest.fn().mockResolvedValue(result),
     maybeSingle: jest.fn().mockResolvedValue(result),
   };
@@ -79,13 +80,19 @@ describe("getProfileById()", () => {
   });
 });
 
+const baseFilters = {
+  minAge: 25,
+  maxAge: 40,
+  acceptedMaritalStatuses: null,
+  acceptedEducationLevels: null,
+} as const;
+
 describe("getMatches()", () => {
   it("returns an array of matching profiles", async () => {
     const mock = buildMockClient({ data: [profileFixture], error: null });
     const result = await getMatches(
       mock as unknown as Parameters<typeof getMatches>[0],
-      25,
-      40
+      baseFilters
     );
     expect(result).toHaveLength(1);
     expect(result[0].id).toBe("user-1");
@@ -95,8 +102,7 @@ describe("getMatches()", () => {
     const mock = buildMockClient({ data: null, error: null });
     const result = await getMatches(
       mock as unknown as Parameters<typeof getMatches>[0],
-      25,
-      40
+      baseFilters
     );
     expect(result).toEqual([]);
   });
@@ -107,9 +113,39 @@ describe("getMatches()", () => {
     await expect(
       getMatches(
         mock as unknown as Parameters<typeof getMatches>[0],
-        25,
-        40
+        baseFilters
       )
     ).rejects.toThrow("Query failed");
+  });
+
+  it("applies marital status filter when provided", async () => {
+    const mock = buildMockClient({ data: [profileFixture], error: null });
+    await getMatches(
+      mock as unknown as Parameters<typeof getMatches>[0],
+      { ...baseFilters, acceptedMaritalStatuses: ["single"] }
+    );
+    expect(mock._chain.in).toHaveBeenCalledWith("marital_status", ["single"]);
+  });
+
+  it("applies education level filter when provided", async () => {
+    const mock = buildMockClient({ data: [profileFixture], error: null });
+    await getMatches(
+      mock as unknown as Parameters<typeof getMatches>[0],
+      { ...baseFilters, acceptedEducationLevels: ["bachelor", "master"] }
+    );
+    expect(mock._chain.in).toHaveBeenCalledWith("education_level", [
+      "bachelor",
+      "master",
+    ]);
+  });
+
+  it("skips age filter when minAge or maxAge is null", async () => {
+    const mock = buildMockClient({ data: [], error: null });
+    await getMatches(
+      mock as unknown as Parameters<typeof getMatches>[0],
+      { minAge: null, maxAge: null, acceptedMaritalStatuses: null, acceptedEducationLevels: null }
+    );
+    expect(mock._chain.gte).not.toHaveBeenCalled();
+    expect(mock._chain.lte).not.toHaveBeenCalled();
   });
 });

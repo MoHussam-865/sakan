@@ -1,7 +1,24 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { Database, Profile } from "@/types/supabase";
+import type {
+  Database,
+  Profile,
+  MaritalStatusType,
+  EducationType,
+} from "@/types/supabase";
+import { dobRangeFromAgeRange } from "@/lib/utils/matches";
 
 type Client = SupabaseClient<Database>;
+
+/**
+ * Filters applied to the match query, derived from the viewer's partner preferences.
+ * All fields are nullable – absent values mean "no filter on that dimension".
+ */
+export interface MatchFilters {
+  minAge: number | null;
+  maxAge: number | null;
+  acceptedMaritalStatuses: MaritalStatusType[] | null;
+  acceptedEducationLevels: EducationType[] | null;
+}
 
 /**
  * Fetches a single profile by its UUID.
@@ -23,31 +40,46 @@ export async function getProfileById(
 
 /**
  * Returns active profiles of the opposite gender that satisfy the caller's
- * partner preferences.  RLS enforces the opposite-gender + active filter at
- * the DB layer; this query further narrows by age preference.
+ * partner preferences.  RLS enforces the opposite-gender + active-profile
+ * filter at the DB layer; this query further narrows by age, marital status,
+ * and education level based on the provided filters.
  *
- * @param client   Authenticated Supabase client (server-side).
- * @param minAge   Minimum acceptable age (inclusive).
- * @param maxAge   Maximum acceptable age (inclusive).
+ * @param client   Authenticated Supabase server-side client.
+ * @param filters  Preference-derived filter values (nulls = no constraint).
  */
 export async function getMatches(
   client: Client,
-  minAge: number,
-  maxAge: number
+  filters: MatchFilters
 ): Promise<Profile[]> {
-  const today = new Date();
-  const maxDob = new Date(today);
-  maxDob.setFullYear(today.getFullYear() - minAge);
-  const minDob = new Date(today);
-  minDob.setFullYear(today.getFullYear() - maxAge - 1);
+  const { minAge, maxAge, acceptedMaritalStatuses, acceptedEducationLevels } =
+    filters;
 
-  const { data, error } = await client
+  const base = client
     .from("profiles")
     .select("*")
-    .is("deleted_at", null)
-    .gte("date_of_birth", minDob.toISOString().slice(0, 10))
-    .lte("date_of_birth", maxDob.toISOString().slice(0, 10))
-    .order("created_at", { ascending: false });
+    .is("deleted_at", null);
+
+  const withAge =
+    minAge !== null && maxAge !== null
+      ? (() => {
+          const { minDob, maxDob } = dobRangeFromAgeRange(minAge, maxAge);
+          return base.gte("date_of_birth", minDob).lte("date_of_birth", maxDob);
+        })()
+      : base;
+
+  const withMarital =
+    acceptedMaritalStatuses && acceptedMaritalStatuses.length > 0
+      ? withAge.in("marital_status", acceptedMaritalStatuses)
+      : withAge;
+
+  const withEducation =
+    acceptedEducationLevels && acceptedEducationLevels.length > 0
+      ? withMarital.in("education_level", acceptedEducationLevels)
+      : withMarital;
+
+  const { data, error } = await withEducation.order("created_at", {
+    ascending: false,
+  });
 
   if (error) throw error;
   return data ?? [];

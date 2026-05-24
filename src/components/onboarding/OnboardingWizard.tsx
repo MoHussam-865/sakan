@@ -3,18 +3,19 @@
 import { useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 import type { Profile, PartnerPreference } from "@/types/supabase";
-import {
-  saveOnboardingStep1,
-  saveOnboardingStep2,
-  saveOnboardingStep3,
-  saveOnboardingStep4,
-} from "@/actions/onboarding";
+import { finalizeOnboarding } from "@/actions/onboarding";
 import { StepProgressBar } from "./StepProgressBar";
 import { Step1Form } from "./Step1Form";
 import { Step2Form } from "./Step2Form";
 import { Step3Form } from "./Step3Form";
 import { Step4Form } from "./Step4Form";
-import type { Step1Input, Step2Input, Step3Input, Step4Input } from "@/lib/validation/onboarding";
+import type {
+  FullOnboardingInput,
+  Step1Input,
+  Step2Input,
+  Step3Input,
+  Step4Input,
+} from "@/lib/validation/onboarding";
 
 // ---------------------------------------------------------------------------
 // Resume-step detection
@@ -27,6 +28,44 @@ function getInitialStep(
   if (!profile) return 1;
   if (!preferences) return 4;
   return 1; // Complete – parent page redirects before reaching here
+}
+
+function getInitialData(
+  profile: Profile | null,
+  preferences: PartnerPreference | null
+): Partial<FullOnboardingInput> {
+  if (!profile) return {};
+
+  return {
+    name: profile.name,
+    gender: profile.gender,
+    date_of_birth: profile.date_of_birth,
+    nationality: profile.nationality,
+    country: profile.country,
+    city: profile.city,
+    height_cm: profile.height_cm ?? undefined,
+    weight_kg: profile.weight_kg ?? undefined,
+    skin_color: profile.skin_color ?? undefined,
+    health_status: profile.health_status ?? undefined,
+    smoking_status: profile.smoking_status ?? undefined,
+    education_level: profile.education_level ?? undefined,
+    job_title: profile.job_title ?? undefined,
+    marital_status: profile.marital_status,
+    has_children: profile.has_children,
+    children_count: profile.children_count ?? undefined,
+    children_living_with_me: profile.children_living_with_me,
+    religious_commitment: profile.religious_commitment ?? undefined,
+    hijab_status: profile.hijab_status ?? undefined,
+    beard_status: profile.beard_status ?? undefined,
+    about_me: profile.about_me ?? undefined,
+    partner_description: preferences?.partner_description ?? undefined,
+    min_age: preferences?.min_age ?? undefined,
+    max_age: preferences?.max_age ?? undefined,
+    accepted_marital_statuses:
+      preferences?.accepted_marital_statuses ?? undefined,
+    accepted_education_levels:
+      preferences?.accepted_education_levels ?? undefined,
+  };
 }
 
 // ---------------------------------------------------------------------------
@@ -46,10 +85,10 @@ export function OnboardingWizard({ existingProfile, existingPreferences }: Props
   const [step, setStep] = useState<number>(() =>
     getInitialStep(existingProfile, existingPreferences)
   );
+  const [onboardingData, setOnboardingData] = useState<
+    Partial<FullOnboardingInput>
+  >(() => getInitialData(existingProfile, existingPreferences));
   const [serverError, setServerError] = useState<string | null>(null);
-  const [profileGender, setProfileGender] = useState<
-    "male" | "female" | undefined
-  >(existingProfile?.gender);
 
   const [isPending, startTransition] = useTransition();
 
@@ -66,36 +105,28 @@ export function OnboardingWizard({ existingProfile, existingPreferences }: Props
   }
 
   function handleStep1Submit(data: Step1Input) {
-    startTransition(async () => {
-      const result = await saveOnboardingStep1(data);
-      if (result.success) {
-        setProfileGender(data.gender);
-        goTo(2);
-      } else {
-        setServerError(result.error ?? "save_failed");
-      }
-    });
+    setOnboardingData((prev) => ({ ...prev, ...data }));
+    goTo(2);
   }
 
   function handleStep2Submit(data: Step2Input) {
-    startTransition(async () => {
-      const result = await saveOnboardingStep2(data);
-      if (result.success) goTo(3);
-      else setServerError(result.error ?? "save_failed");
-    });
+    setOnboardingData((prev) => ({ ...prev, ...data }));
+    goTo(3);
   }
 
   function handleStep3Submit(data: Step3Input) {
-    startTransition(async () => {
-      const result = await saveOnboardingStep3(data);
-      if (result.success) goTo(4);
-      else setServerError(result.error ?? "save_failed");
-    });
+    setOnboardingData((prev) => ({ ...prev, ...data }));
+    goTo(4);
   }
 
   function handleStep4Submit(data: Step4Input) {
+    const payload: FullOnboardingInput = {
+      ...(onboardingData as FullOnboardingInput),
+      ...data,
+    };
+
     startTransition(async () => {
-      const result = await saveOnboardingStep4(data);
+      const result = await finalizeOnboarding(payload);
       // If redirect fires, this branch is never reached
       if (result && !result.success) {
         setServerError(result.error ?? "save_failed");
@@ -133,18 +164,14 @@ export function OnboardingWizard({ existingProfile, existingPreferences }: Props
       {step === 1 && (
         <Step1Form
           isPending={isPending}
-          defaultValues={
-            existingProfile
-              ? {
-                  name: existingProfile.name,
-                  gender: existingProfile.gender,
-                  date_of_birth: existingProfile.date_of_birth,
-                  nationality: existingProfile.nationality,
-                  country: existingProfile.country,
-                  city: existingProfile.city,
-                }
-              : undefined
-          }
+          defaultValues={{
+            name: onboardingData.name,
+            gender: onboardingData.gender,
+            date_of_birth: onboardingData.date_of_birth,
+            nationality: onboardingData.nationality,
+            country: onboardingData.country,
+            city: onboardingData.city,
+          }}
           onSubmit={handleStep1Submit}
         />
       )}
@@ -152,17 +179,13 @@ export function OnboardingWizard({ existingProfile, existingPreferences }: Props
       {step === 2 && (
         <Step2Form
           isPending={isPending}
-          defaultValues={
-            existingProfile
-              ? {
-                  height_cm: existingProfile.height_cm ?? undefined,
-                  weight_kg: existingProfile.weight_kg ?? undefined,
-                  skin_color: existingProfile.skin_color ?? undefined,
-                  health_status: existingProfile.health_status ?? undefined,
-                  smoking_status: existingProfile.smoking_status ?? undefined,
-                }
-              : undefined
-          }
+          defaultValues={{
+            height_cm: onboardingData.height_cm,
+            weight_kg: onboardingData.weight_kg,
+            skin_color: onboardingData.skin_color,
+            health_status: onboardingData.health_status,
+            smoking_status: onboardingData.smoking_status,
+          }}
           onSubmit={handleStep2Submit}
           onBack={() => goTo(1)}
         />
@@ -171,24 +194,18 @@ export function OnboardingWizard({ existingProfile, existingPreferences }: Props
       {step === 3 && (
         <Step3Form
           isPending={isPending}
-          gender={profileGender}
-          defaultValues={
-            existingProfile
-              ? {
-                  education_level: existingProfile.education_level ?? undefined,
-                  job_title: existingProfile.job_title ?? undefined,
-                  marital_status: existingProfile.marital_status,
-                  has_children: existingProfile.has_children,
-                  children_count: existingProfile.children_count ?? undefined,
-                  children_living_with_me:
-                    existingProfile.children_living_with_me,
-                  religious_commitment:
-                    existingProfile.religious_commitment ?? undefined,
-                  hijab_status: existingProfile.hijab_status ?? undefined,
-                  beard_status: existingProfile.beard_status ?? undefined,
-                }
-              : undefined
-          }
+          gender={onboardingData.gender}
+          defaultValues={{
+            education_level: onboardingData.education_level,
+            job_title: onboardingData.job_title,
+            marital_status: onboardingData.marital_status,
+            has_children: onboardingData.has_children,
+            children_count: onboardingData.children_count,
+            children_living_with_me: onboardingData.children_living_with_me,
+            religious_commitment: onboardingData.religious_commitment,
+            hijab_status: onboardingData.hijab_status,
+            beard_status: onboardingData.beard_status,
+          }}
           onSubmit={handleStep3Submit}
           onBack={() => goTo(2)}
         />
@@ -198,15 +215,12 @@ export function OnboardingWizard({ existingProfile, existingPreferences }: Props
         <Step4Form
           isPending={isPending}
           defaultValues={{
-            about_me: existingProfile?.about_me ?? undefined,
-            partner_description:
-              existingPreferences?.partner_description ?? undefined,
-            min_age: existingPreferences?.min_age ?? undefined,
-            max_age: existingPreferences?.max_age ?? undefined,
-            accepted_marital_statuses:
-              existingPreferences?.accepted_marital_statuses ?? undefined,
-            accepted_education_levels:
-              existingPreferences?.accepted_education_levels ?? undefined,
+            about_me: onboardingData.about_me,
+            partner_description: onboardingData.partner_description,
+            min_age: onboardingData.min_age,
+            max_age: onboardingData.max_age,
+            accepted_marital_statuses: onboardingData.accepted_marital_statuses,
+            accepted_education_levels: onboardingData.accepted_education_levels,
           }}
           onSubmit={handleStep4Submit}
           onBack={() => goTo(3)}

@@ -1,4 +1,5 @@
 import {
+  fullOnboardingSchema,
   step1Schema,
   step2Schema,
   step3Schema,
@@ -274,5 +275,55 @@ describe("step4Schema", () => {
     const result = step4Schema.safeParse({ about_me: "" });
     expect(result.success).toBe(true);
     if (result.success) expect(result.data.about_me).toBeUndefined();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Full onboarding payload
+// ---------------------------------------------------------------------------
+
+describe("fullOnboardingSchema", () => {
+  const valid = {
+    name: "Ali Al-Mansouri",
+    gender: "male",
+    date_of_birth: "1990-06-15",
+    nationality: "Saudi",
+    country: "Saudi Arabia",
+    city: "Riyadh",
+    marital_status: "single",
+    has_children: false,
+    min_age: 24,
+    max_age: 32,
+  } as const;
+
+  it("accepts a minimal valid full payload", () => {
+    expect(fullOnboardingSchema.safeParse(valid).success).toBe(true);
+  });
+
+  it("returns children_count_required when has_children is true and children_count is missing", () => {
+    const result = fullOnboardingSchema.safeParse({
+      ...valid,
+      has_children: true,
+    });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.flatten().fieldErrors.children_count).toContain(
+        "children_count_required"
+      );
+    }
+  });
+
+  it("returns age_range_invalid when min_age is greater than max_age", () => {
+    const result = fullOnboardingSchema.safeParse({
+      ...valid,
+      min_age: 40,
+      max_age: 30,
+    });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.flatten().fieldErrors.max_age).toContain(
+        "age_range_invalid"
+      );
+    }
   });
 });

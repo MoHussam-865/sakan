@@ -1,6 +1,7 @@
 import { getLocale } from "next-intl/server";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import NavBar from "@/components/ui/NavBar";
 
 // Protected layout – wraps all authenticated routes (dashboard, profile, chat).
 // Redirects unauthenticated visitors to the login page.
@@ -20,8 +21,8 @@ export default async function ProtectedLayout({
   }
 
   return (
-    <div className="flex-1 flex flex-col">
-      {/* Navigation bar – Phase 7 */}
+    <div className="flex-1 flex flex-col min-h-screen">
+      <NavBar />
       <main className="flex-1">{children}</main>
     </div>
   );
