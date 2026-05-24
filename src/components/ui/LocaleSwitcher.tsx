@@ -1,0 +1,51 @@
+"use client";
+
+import { useLocale, useTranslations } from "next-intl";
+import { Link, usePathname } from "@/i18n/navigation";
+import { routing, type Locale } from "@/i18n/routing";
+import { cn } from "@/lib/utils/cn";
+
+/**
+ * Locale toggle rendered as "EN | عربي".
+ * Navigates to the same page path in the selected locale via next-intl Link.
+ */
+export default function LocaleSwitcher() {
+  const currentLocale = useLocale() as Locale;
+  const pathname = usePathname();
+  const t = useTranslations("locale_switcher");
+
+  return (
+    <nav aria-label={t("label")}>
+      <ul className="flex items-center gap-0" role="list">
+        {routing.locales.map((locale, i) => {
+          const isActive = locale === currentLocale;
+          return (
+            <li key={locale} className="flex items-center">
+              {i > 0 && (
+                <span
+                  className="mx-2 text-stone-300 select-none"
+                  aria-hidden="true"
+                >
+                  |
+                </span>
+              )}
+              <Link
+                href={pathname}
+                locale={locale}
+                aria-current={isActive ? "true" : undefined}
+                className={cn(
+                  "text-xs font-medium tracking-wide uppercase transition-colors",
+                  isActive
+                    ? "text-stone-900 cursor-default pointer-events-none"
+                    : "text-stone-400 hover:text-stone-700"
+                )}
+              >
+                {t(locale)}
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
+  );
+}

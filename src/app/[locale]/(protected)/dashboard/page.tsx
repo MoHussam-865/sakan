@@ -2,7 +2,7 @@ import { getTranslations } from "next-intl/server";
 
 // Dashboard page scaffold – match feed implemented in Phase 7.
 export default async function DashboardPage() {
-  const t = await getTranslations("protected");
+  const t = await getTranslations("dashboard");
 
   return (
     <section className="w-full max-w-4xl mx-auto px-4 py-8">

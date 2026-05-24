@@ -6,18 +6,133 @@
     "error_retry": "Try again",
     "not_found_title": "Page not found",
     "not_found_description": "The page you are looking for does not exist.",
-    "not_found_back": "Go home"
+    "not_found_back": "Go home",
+    "save": "Save",
+    "cancel": "Cancel",
+    "back": "Back",
+    "next": "Next",
+    "submit": "Submit",
+    "report": "Report user",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "nav": {
+    "dashboard": "Matches",
+    "profile": "My Profile",
+    "chat": "Messages",
+    "sign_out": "Sign out"
+  },
+  "locale_switcher": {
+    "en": "EN",
+    "ar": "\u0639\u0631\u0628\u064a",
+    "label": "Switch language"
   },
   "auth": {
     "title": "Sign in to Sakan",
-    "subtitle": "Find your perfect match"
+    "subtitle": "Find your perfect match",
+    "email_label": "Email address",
+    "email_placeholder": "you@example.com",
+    "otp_label": "One-time code",
+    "otp_placeholder": "123456",
+    "send_otp": "Send code",
+    "verify_otp": "Verify",
+    "resend_otp": "Resend code",
+    "otp_sent": "We sent a 6-digit code to {email}",
+    "otp_invalid": "Invalid or expired code. Try again.",
+    "email_required": "Email is required",
+    "email_invalid": "Enter a valid email address",
+    "otp_required": "Code is required",
+    "otp_length": "Code must be 6 digits"
   },
   "onboarding": {
     "title": "Complete your profile",
-    "subtitle": "Tell us about yourself"
+    "subtitle": "Tell us about yourself",
+    "step_of": "Step {current} of {total}",
+    "step1_title": "Core Identity",
+    "step2_title": "Physical & Health",
+    "step3_title": "Background & Lifestyle",
+    "step4_title": "Preferences",
+    "name_label": "Full name",
+    "gender_label": "Gender",
+    "dob_label": "Date of birth",
+    "nationality_label": "Nationality",
+    "country_label": "Country",
+    "city_label": "City",
+    "height_label": "Height (cm)",
+    "weight_label": "Weight (kg)",
+    "skin_color_label": "Skin color",
+    "education_label": "Education level",
+    "job_label": "Job title",
+    "marital_status_label": "Marital status",
+    "has_children_label": "Do you have children?",
+    "children_count_label": "How many children?",
+    "children_living_label": "Children living with you?",
+    "religious_commitment_label": "Religious commitment",
+    "hijab_label": "Hijab status",
+    "beard_label": "Beard",
+    "smoking_label": "Smoking status",
+    "health_label": "Health status",
+    "about_me_label": "About me",
+    "about_me_placeholder": "Tell matches about yourself\u2026",
+    "partner_description_label": "Partner description",
+    "partner_description_placeholder": "Describe your ideal partner\u2026",
+    "min_age_label": "Minimum age",
+    "max_age_label": "Maximum age",
+    "accepted_marital_statuses_label": "Accepted marital statuses",
+    "accepted_education_levels_label": "Accepted education levels"
   },
-  "protected": {
+  "dashboard": {
     "title": "Your matches",
-    "subtitle": "People who match your preferences"
+    "subtitle": "People who match your preferences",
+    "no_matches": "No matches found",
+    "no_matches_hint": "Update your preferences to see more matches",
+    "view_profile": "View profile",
+    "start_chat": "Start conversation"
+  },
+  "profile": {
+    "title": "Profile",
+    "edit": "Edit profile",
+    "report": "Report user",
+    "age": "{age} years old"
+  },
+  "chat": {
+    "title": "Messages",
+    "no_chats": "No conversations yet",
+    "message_placeholder": "Write a message\u2026",
+    "send": "Send",
+    "you": "You"
+  },
+  "enums": {
+    "gender": {
+      "male": "Male",
+      "female": "Female"
+    },
+    "marital_status": {
+      "single": "Single",
+      "divorced": "Divorced",
+      "widowed": "Widowed"
+    },
+    "skin_color": {
+      "white": "White",
+      "wheatish": "Wheatish",
+      "brown": "Brown",
+      "dark": "Dark"
+    },
+    "education": {
+      "high_school": "High school",
+      "bachelor": "Bachelor\u2019s degree",
+      "master": "Master\u2019s degree",
+      "phd": "PhD"
+    },
+    "religious_commitment": {
+      "practicing": "Practicing",
+      "moderate": "Moderate",
+      "not_practicing": "Not practicing"
+    },
+    "hijab_status": {
+      "none": "None",
+      "hijab": "Hijab",
+      "niqab": "Niqab"
+    }
   }
 }

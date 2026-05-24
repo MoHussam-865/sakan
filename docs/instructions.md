@@ -39,19 +39,32 @@ Avoid the generic, templated "AI-generated look". We are building a premium, edi
 
 ## 7. Workflow & Git Commits
 Whenever you finish generating code for a task, you must provide a ready-to-use Git commit message for me to review.
-* **CRITICAL:** Do NOT execute any `git` commands yourself. You are strictly forbidden from committing code. Only provide the text.
+* **CRITICAL:** Do NOT execute any `git` commands yourself, and do NOT output the `git commit` terminal command. Only provide the raw text of the commit message.
 * **Provide a Summary:** Briefly list the files created, modified, or deleted.
-* **Provide the Commit Message:** Output a code block containing a formatted Git commit command for me to copy and run. Use the Conventional Commits format (e.g., `feat:`, `fix:`, `refactor:`, `test:`, `chore:`). 
+* **Provide the Commit Message:** Output a code block containing just the raw message text. Use the Conventional Commits format.
+  * *Example:*
+    ```text
+    feat: implement Phase 2 – app skeleton and route topology
+
+    Added next-intl routing, middleware, i18n request config, locale layout with html lang/dir, route groups (auth/onboarding/protected), skeleton pages, error boundaries, loading states, not-found pages, and 11 new tests.
+    ```
 
 ## 8. Self-Correction & Error Checking (CRITICAL)
 Before you declare a task finished and provide the Git commit message, you MUST perform a final quality check to ensure no leftover errors:
+* **Build Check (MANDATORY):** You must run `npm run build` to verify the Next.js production build succeeds. This guarantees there are no hidden type errors, missing keys, or broken server/client boundaries. 
 * **Directives:** Ensure `"use client"` or `"use server"` are at the very top of the file where required.
 * **Missing Imports:** Double-check that all components, hooks, and types are properly imported.
-* **Hydration Mismatches:** Ensure Client Components don't render data that differs from the server render (e.g., relying on `window` objects without `useEffect`).
-* **Static Analysis:** If you have terminal execution capabilities, run `npm run lint` and `npx tsc --noEmit` to confirm there are no static errors. If you lack terminal access, perform a rigorous mental trace.
+* **Hydration Mismatches:** Ensure Client Components don't render data that differs from the server render.
+* **Static Analysis:** Run `npm run lint` and `npx tsc --noEmit` to confirm there are no static errors.
 
 ## 9. Project Structure Maintenance (MANDATORY)
 To maintain a pristine repository architecture, you MUST create or update a root file named `project_structure.md` whenever you introduce new folders or files.
 * **Visual Tree:** Maintain a clean visual directory tree mapping out the `src/` structure (e.g., `app/`, `components/`, `lib/`, `actions/`).
 * **File Brief Notes:** For every single file listed in the tree, you must include a brief, one-sentence note explaining its precise purpose.
 * **Keep it Sync:** This file must be updated in tandem with your code changes *before* delivering the final task summary.
+
+## 10. Incremental Documentation (MANDATORY)
+Whenever you complete a task, you must generate a progressive summary file inside the `docs/` folder to act as a changelog.
+* **Numbering System:** Look at the existing files in the `docs/` directory. Find the file with the highest numeric prefix (e.g., if you see `1_foundation.md` and `2_app_skeleton.md`, the highest number is 2).
+* **Next File:** Increment that highest number by 1 and create a new markdown file (e.g., `3_new_feature_name.md`).
+* **Content:** Inside this new file, write a clear, concise summary of the features implemented, architectural decisions made, and any new dependencies added during your current task.
