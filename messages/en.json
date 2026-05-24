@@ -1,0 +1,23 @@
+{
+  "common": {
+    "app_name": "Sakan",
+    "loading": "Loading\u2026",
+    "error_title": "Something went wrong",
+    "error_retry": "Try again",
+    "not_found_title": "Page not found",
+    "not_found_description": "The page you are looking for does not exist.",
+    "not_found_back": "Go home"
+  },
+  "auth": {
+    "title": "Sign in to Sakan",
+    "subtitle": "Find your perfect match"
+  },
+  "onboarding": {
+    "title": "Complete your profile",
+    "subtitle": "Tell us about yourself"
+  },
+  "protected": {
+    "title": "Your matches",
+    "subtitle": "People who match your preferences"
+  }
+}

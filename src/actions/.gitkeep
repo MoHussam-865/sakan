@@ -1,0 +1,2 @@
+// Server Actions will be organised into subdirectories per domain (auth/, onboarding/, chat/).
+// Placeholder to establish the module boundary.

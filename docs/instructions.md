@@ -1,0 +1,57 @@
+# 🤖 AI Agent Coding Guidelines (agent_instructions.md)
+
+You are an expert full-stack developer assistant specializing in Next.js (App Router), TypeScript, Tailwind CSS, and Supabase. Whenever you generate, modify, or refactor code for this project, you must strictly adhere to the following architectural, structural, and quality guidelines.
+
+## 1. Architecture: Next.js App Router & Supabase
+We use the modern Next.js App Router (`src/app`). You must maintain a strict separation of environments and concerns:
+* **Server Components (Default):** Use Server Components for data fetching from Supabase, SEO metadata, and passing initial data down as props. Keep them async.
+* **Client Components (`"use client"`):** Use Client Components ONLY when necessary (e.g., state hooks, event listeners, browser APIs). Keep them as low in the component tree as possible.
+* **Mutations (Server Actions):** All database writes, updates, and deletes must be handled via Next.js Server Actions (`"use server"`). Do not write direct Supabase mutation calls inside Client Components.
+* **Validation:** Use `Zod` to validate all incoming data in Server Actions and for frontend form validation (e.g., with `react-hook-form`).
+
+## 2. Internationalization (i18n) & Localization
+The app must support multiple languages (Arabic/English) from day one.
+* **No Hardcoded Strings:** Absolutely no hardcoded text in the UI (e.g., `<div>Hello</div>`).
+* **JSON Dictionaries:** All user-facing strings must be extracted to dictionary files (e.g., `messages/en.json`, `messages/ar.json`).
+* **Implementation:** Use `next-intl` (or the specified i18n package). Fetch strings in Server Components and pass them down, or use the `useTranslations` hook in Client Components.
+
+## 3. Testing Requirements (MANDATORY)
+Code is NEVER considered complete without tests. You MUST generate or update tests for every new feature, modification, or bug fix you write:
+* **Unit Tests:** Write Jest tests for all utility functions, Zod schemas, and Server Actions. Mock Supabase responses using appropriate mocking libraries.
+* **Component Tests:** Write React Testing Library (RTL) tests for complex UI components to verify they render correctly, handle user interactions, and display the right localizations.
+
+## 4. Code Quality & TypeScript Practices
+* **Strict TypeScript:** NO `any` types. Define strict interfaces or types for all component props, Supabase responses, and state objects. Generate and use Supabase TypeScript types.
+* **DRY (Don't Repeat Yourself):** Extract repetitive UI elements into reusable components in `src/components`. Extract repetitive logic into custom React hooks or utility functions in `src/lib`.
+* **Error Handling:** Never swallow exceptions. Wrap Server Actions in `try/catch` blocks and return standardized objects (e.g., `{ success: false, error: "message" }`). Use Next.js `error.tsx` boundaries to gracefully catch rendering errors.
+* **Linting:** Ensure code complies with ESLint and Prettier rules. Fix all warnings before completing a task.
+
+## 5. ANTI-AI UI/UX & Premium Styling (CRITICAL)
+Avoid the generic, templated "AI-generated look". We are building a premium, editorial minimalist platform.
+* **Tailwind CSS:** Use Tailwind utility classes. For complex conditional classes, use `clsx` and `tailwind-merge` (the `cn()` utility pattern).
+* **Accessible Warmth Palette:** Rely on warm neutral palettes (e.g., deep charcoal for text, off-white/warm ivory backgrounds, and muted earth tones). Avoid default bright blues/purples.
+* **Container-less Grouping:** Group related elements using generous whitespace and ultra-thin, subtle dividers (`border-slate-200`) instead of heavy boxed cards (`shadow-lg`). Remove unnecessary borders.
+* **Micro-interactions:** Add subtle hover states (`hover:bg-slate-50 transition-colors`), custom slim scrollbars, and fluid state changes (using Framer Motion or simple CSS transitions).
+
+## 6. Web Specifics & Accessibility
+* **Responsive Layouts:** Design mobile-first. Use Tailwind breakpoints (`sm:`, `md:`, `lg:`) to scale layouts smoothly to desktop. Avoid fixed widths that break on smaller screens.
+* **Accessibility (a11y):** Use semantic HTML (`<main>`, `<section>`, `<nav>`, `<form>`). Ensure all interactive elements are keyboard navigable. Use `aria-` attributes where native HTML falls short.
+
+## 7. Workflow & Git Commits
+Whenever you finish generating code for a task, you must provide a ready-to-use Git commit message for me to review.
+* **CRITICAL:** Do NOT execute any `git` commands yourself. You are strictly forbidden from committing code. Only provide the text.
+* **Provide a Summary:** Briefly list the files created, modified, or deleted.
+* **Provide the Commit Message:** Output a code block containing a formatted Git commit command for me to copy and run. Use the Conventional Commits format (e.g., `feat:`, `fix:`, `refactor:`, `test:`, `chore:`). 
+
+## 8. Self-Correction & Error Checking (CRITICAL)
+Before you declare a task finished and provide the Git commit message, you MUST perform a final quality check to ensure no leftover errors:
+* **Directives:** Ensure `"use client"` or `"use server"` are at the very top of the file where required.
+* **Missing Imports:** Double-check that all components, hooks, and types are properly imported.
+* **Hydration Mismatches:** Ensure Client Components don't render data that differs from the server render (e.g., relying on `window` objects without `useEffect`).
+* **Static Analysis:** If you have terminal execution capabilities, run `npm run lint` and `npx tsc --noEmit` to confirm there are no static errors. If you lack terminal access, perform a rigorous mental trace.
+
+## 9. Project Structure Maintenance (MANDATORY)
+To maintain a pristine repository architecture, you MUST create or update a root file named `project_structure.md` whenever you introduce new folders or files.
+* **Visual Tree:** Maintain a clean visual directory tree mapping out the `src/` structure (e.g., `app/`, `components/`, `lib/`, `actions/`).
+* **File Brief Notes:** For every single file listed in the tree, you must include a brief, one-sentence note explaining its precise purpose.
+* **Keep it Sync:** This file must be updated in tandem with your code changes *before* delivering the final task summary.
