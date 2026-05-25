@@ -30,7 +30,7 @@ export default async function DashboardPage() {
           preferences?.accepted_marital_statuses ?? null,
         acceptedEducationLevels:
           preferences?.accepted_education_levels ?? null,
-      }).catch(() => [])
+      }, profile).catch(() => [])
     : [];
 
   return (

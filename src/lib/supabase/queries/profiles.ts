@@ -58,24 +58,32 @@ export async function getProfileIdByUserId(
 
 /**
  * Returns active profiles of the opposite gender that satisfy the caller's
- * partner preferences.  RLS enforces the opposite-gender + active-profile
- * filter at the DB layer; this query further narrows by age, marital status,
- * and education level based on the provided filters.
+ * partner preferences. This query filters by:
+ * - Opposite gender (based on currentUserProfile.gender)
+ * - Not the current user (user_id != currentUserProfile.user_id)
+ * - Age, marital status, and education level based on the provided filters.
  *
- * @param client   Authenticated Supabase server-side client.
- * @param filters  Preference-derived filter values (nulls = no constraint).
+ * @param client              Authenticated Supabase server-side client.
+ * @param filters             Preference-derived filter values (nulls = no constraint).
+ * @param currentUserProfile  The current user's profile (used for gender and user_id filtering).
  */
 export async function getMatches(
   client: Client,
-  filters: MatchFilters
+  filters: MatchFilters,
+  currentUserProfile: Profile
 ): Promise<Profile[]> {
   const { minAge, maxAge, acceptedMaritalStatuses, acceptedEducationLevels } =
     filters;
 
+  // Determine opposite gender
+  const oppositeGender = currentUserProfile.gender === "male" ? "female" : "male";
+
   const base = client
     .from("profiles")
     .select("*")
-    .is("deleted_at", null);
+    .is("deleted_at", null)
+    .eq("gender", oppositeGender)
+    .neq("user_id", currentUserProfile.user_id);
 
   const withAge =
     minAge !== null && maxAge !== null

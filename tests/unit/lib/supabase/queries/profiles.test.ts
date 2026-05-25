@@ -40,6 +40,7 @@ function buildMockClient(result: { data: unknown; error: null | Error }) {
   const chain = {
     select: jest.fn().mockReturnThis(),
     eq: jest.fn().mockReturnThis(),
+    neq: jest.fn().mockReturnThis(),
     is: jest.fn().mockReturnThis(),
     gte: jest.fn().mockReturnThis(),
     lte: jest.fn().mockReturnThis(),
@@ -127,7 +128,8 @@ describe("getMatches()", () => {
     const mock = buildMockClient({ data: [profileFixture], error: null });
     const result = await getMatches(
       mock as unknown as Parameters<typeof getMatches>[0],
-      baseFilters
+      baseFilters,
+      profileFixture
     );
     expect(result).toHaveLength(1);
     expect(result[0].id).toBe("user-1");
@@ -137,7 +139,8 @@ describe("getMatches()", () => {
     const mock = buildMockClient({ data: null, error: null });
     const result = await getMatches(
       mock as unknown as Parameters<typeof getMatches>[0],
-      baseFilters
+      baseFilters,
+      profileFixture
     );
     expect(result).toEqual([]);
   });
@@ -148,7 +151,8 @@ describe("getMatches()", () => {
     await expect(
       getMatches(
         mock as unknown as Parameters<typeof getMatches>[0],
-        baseFilters
+        baseFilters,
+        profileFixture
       )
     ).rejects.toThrow("Query failed");
   });
@@ -157,7 +161,8 @@ describe("getMatches()", () => {
     const mock = buildMockClient({ data: [profileFixture], error: null });
     await getMatches(
       mock as unknown as Parameters<typeof getMatches>[0],
-      { ...baseFilters, acceptedMaritalStatuses: ["single"] }
+      { ...baseFilters, acceptedMaritalStatuses: ["single"] },
+      profileFixture
     );
     expect(mock._chain.in).toHaveBeenCalledWith("marital_status", ["single"]);
   });
@@ -166,7 +171,8 @@ describe("getMatches()", () => {
     const mock = buildMockClient({ data: [profileFixture], error: null });
     await getMatches(
       mock as unknown as Parameters<typeof getMatches>[0],
-      { ...baseFilters, acceptedEducationLevels: ["bachelor", "master"] }
+      { ...baseFilters, acceptedEducationLevels: ["bachelor", "master"] },
+      profileFixture
     );
     expect(mock._chain.in).toHaveBeenCalledWith("education_level", [
       "bachelor",
@@ -178,7 +184,8 @@ describe("getMatches()", () => {
     const mock = buildMockClient({ data: [], error: null });
     await getMatches(
       mock as unknown as Parameters<typeof getMatches>[0],
-      { minAge: null, maxAge: null, acceptedMaritalStatuses: null, acceptedEducationLevels: null }
+      { minAge: null, maxAge: null, acceptedMaritalStatuses: null, acceptedEducationLevels: null },
+      profileFixture
     );
     expect(mock._chain.gte).not.toHaveBeenCalled();
     expect(mock._chain.lte).not.toHaveBeenCalled();
