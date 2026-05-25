@@ -126,29 +126,47 @@ ALTER TABLE messages ENABLE ROW LEVEL SECURITY;
 
 -- Profile Access
 CREATE POLICY "Users can view opposite gender active profiles"
-ON profiles FOR SELECT USING (deleted_at IS NULL AND gender != (SELECT gender FROM profiles WHERE id = auth.uid()));
+ON profiles FOR SELECT USING (deleted_at IS NULL AND gender != (SELECT gender FROM profiles WHERE user_id = auth.uid()));
 
 CREATE POLICY "Users can update own profile"
-ON profiles FOR UPDATE USING (auth.uid() = id);
+ON profiles FOR UPDATE USING (auth.uid() = user_id);
 
 CREATE POLICY "Users can insert own profile"
-ON profiles FOR INSERT WITH CHECK (auth.uid() = id);
+ON profiles FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+CREATE OR REPLACE FUNCTION get_my_profile_id()
+RETURNS UUID
+LANGUAGE sql
+SECURITY DEFINER
+STABLE
+SET search_path = public
+AS $$
+  SELECT id FROM profiles WHERE user_id = auth.uid() LIMIT 1;
+$$;
 
 -- Chat Access
 CREATE POLICY "Users can view their own chats"
-ON chats FOR SELECT USING (auth.uid() = user1_id OR auth.uid() = user2_id);
+ON chats FOR SELECT USING (get_my_profile_id() = user1_id OR get_my_profile_id() = user2_id);
 
 CREATE POLICY "Users can create chats"
-ON chats FOR INSERT WITH CHECK (auth.uid() = user1_id OR auth.uid() = user2_id);
+ON chats FOR INSERT WITH CHECK (get_my_profile_id() = user1_id OR get_my_profile_id() = user2_id);
 
 -- Message Access
 CREATE POLICY "Users can view messages in their chats"
 ON messages FOR SELECT USING (
-    EXISTS (SELECT 1 FROM chats WHERE chats.id = messages.chat_id AND (chats.user1_id = auth.uid() OR chats.user2_id = auth.uid()))
+    EXISTS (
+        SELECT 1 FROM chats
+        WHERE chats.id = messages.chat_id
+          AND (get_my_profile_id() = chats.user1_id OR get_my_profile_id() = chats.user2_id)
+    )
 );
 
 CREATE POLICY "Users can insert messages in their chats"
 ON messages FOR INSERT WITH CHECK (
-    auth.uid() = sender_id AND
-    EXISTS (SELECT 1 FROM chats WHERE chats.id = messages.chat_id AND (chats.user1_id = auth.uid() OR chats.user2_id = auth.uid()))
+    get_my_profile_id() = sender_id AND
+    EXISTS (
+        SELECT 1 FROM chats
+        WHERE chats.id = messages.chat_id
+          AND (get_my_profile_id() = chats.user1_id OR get_my_profile_id() = chats.user2_id)
+    )
 );

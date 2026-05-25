@@ -104,21 +104,29 @@ SECURITY DEFINER
 STABLE
 SET search_path = public
 AS $$
-  SELECT gender FROM profiles WHERE id = auth.uid();
+    SELECT gender FROM profiles WHERE user_id = auth.uid();
+$$;
+
+-- Helper: resolves the current caller's profile UUID from auth.uid().
+CREATE OR REPLACE FUNCTION get_my_profile_id()
+RETURNS UUID
+LANGUAGE sql
+SECURITY DEFINER
+STABLE
+SET search_path = public
+AS $$
+    SELECT id FROM profiles WHERE user_id = auth.uid() LIMIT 1;
 $$;
 
 -- Profile visibility policies.
--- Policy 1: users can always read their own profile row (required for
---   upsert – PostgreSQL's INSERT ON CONFLICT DO UPDATE implicitly SELECTs
---   the conflicting row; without this policy the read returns nothing,
---   auth.uid() can't be resolved, and the INSERT WITH CHECK fails).
+-- Policy 1: users can always read their own profile row
+DROP POLICY IF EXISTS "Users can view own profile" ON profiles;
 CREATE POLICY "Users can view own profile"
 ON profiles FOR SELECT
-USING (auth.uid() = id);
+USING (auth.uid() = user_id);
 
 -- Policy 2: active profiles of the opposite gender (the match feed).
---   Uses get_my_gender() instead of an inline sub-SELECT to prevent the
---   policy from recursively triggering itself (PostgreSQL error 42P17).
+DROP POLICY IF EXISTS "Users can view opposite gender active profiles" ON profiles;
 CREATE POLICY "Users can view opposite gender active profiles"
 ON profiles FOR SELECT
 USING (
@@ -127,58 +135,72 @@ USING (
 );
 
 -- Profile write policies: users manage only their own row.
+DROP POLICY IF EXISTS "Users can update own profile" ON profiles;
 CREATE POLICY "Users can update own profile"
 ON profiles FOR UPDATE
-USING (auth.uid() = id);
+USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can insert own profile" ON profiles;
 CREATE POLICY "Users can insert own profile"
 ON profiles FOR INSERT
-WITH CHECK (auth.uid() = id);
+WITH CHECK (auth.uid() = user_id);
+
 
 -- Partner preferences: users can only read/write their own preferences.
+DROP POLICY IF EXISTS "Users can view own partner preferences" ON partner_preferences;
 CREATE POLICY "Users can view own partner preferences"
 ON partner_preferences FOR SELECT
-USING (auth.uid() = profile_id);
+USING (profile_id = get_my_profile_id());
 
+DROP POLICY IF EXISTS "Users can insert own partner preferences" ON partner_preferences;
 CREATE POLICY "Users can insert own partner preferences"
 ON partner_preferences FOR INSERT
-WITH CHECK (auth.uid() = profile_id);
+WITH CHECK (profile_id = get_my_profile_id());
 
+DROP POLICY IF EXISTS "Users can update own partner preferences" ON partner_preferences;
 CREATE POLICY "Users can update own partner preferences"
 ON partner_preferences FOR UPDATE
-USING (auth.uid() = profile_id);
+USING (profile_id = get_my_profile_id());
+
 
 -- Chat access: both participants can view and create.
+-- chats.user1_id / user2_id reference profiles.id, while auth.uid()
+-- is an auth.users.id value. Resolve once via get_my_profile_id().
+DROP POLICY IF EXISTS "Users can view their own chats" ON chats;
 CREATE POLICY "Users can view their own chats"
 ON chats FOR SELECT
-USING (auth.uid() = user1_id OR auth.uid() = user2_id);
+USING (get_my_profile_id() = user1_id OR get_my_profile_id() = user2_id);
 
+DROP POLICY IF EXISTS "Users can create chats" ON chats;
 CREATE POLICY "Users can create chats"
 ON chats FOR INSERT
-WITH CHECK (auth.uid() = user1_id OR auth.uid() = user2_id);
+WITH CHECK (get_my_profile_id() = user1_id OR get_my_profile_id() = user2_id);
+
 
 -- Message access: scoped to chats the user participates in.
+-- Resolve participant membership and sender ownership through get_my_profile_id().
+DROP POLICY IF EXISTS "Users can view messages in their chats" ON messages;
 CREATE POLICY "Users can view messages in their chats"
 ON messages FOR SELECT
 USING (
     EXISTS (
         SELECT 1 FROM chats
         WHERE chats.id = messages.chat_id
-          AND (chats.user1_id = auth.uid() OR chats.user2_id = auth.uid())
+          AND (get_my_profile_id() = chats.user1_id OR get_my_profile_id() = chats.user2_id)
     )
 );
 
+DROP POLICY IF EXISTS "Users can insert messages in their chats" ON messages;
 CREATE POLICY "Users can insert messages in their chats"
 ON messages FOR INSERT
 WITH CHECK (
-    auth.uid() = sender_id
+    get_my_profile_id() = sender_id
     AND EXISTS (
         SELECT 1 FROM chats
         WHERE chats.id = messages.chat_id
-          AND (chats.user1_id = auth.uid() OR chats.user2_id = auth.uid())
+          AND (get_my_profile_id() = chats.user1_id OR get_my_profile_id() = chats.user2_id)
     )
 );
-
 -- ---------------------------------------------------------------------------
 -- Helper: auto-update updated_at on profiles and partner_preferences
 -- ---------------------------------------------------------------------------
@@ -198,3 +220,16 @@ CREATE TRIGGER on_profiles_updated
 CREATE TRIGGER on_partner_preferences_updated
     BEFORE UPDATE ON partner_preferences
     FOR EACH ROW EXECUTE FUNCTION handle_updated_at();
+
+-- ---------------------------------------------------------------------------
+-- Realtime
+-- ---------------------------------------------------------------------------
+
+-- Enable full replica identity on messages so Supabase Realtime can verify
+-- row-level filters (e.g. chat_id=eq.<uuid>) against the complete row.
+ALTER TABLE messages REPLICA IDENTITY FULL;
+
+-- Add messages to the Supabase realtime publication so that INSERT events
+-- are streamed to subscribed clients.  Without this line no WAL events are
+-- broadcast regardless of RLS or channel configuration.
+ALTER PUBLICATION supabase_realtime ADD TABLE messages;

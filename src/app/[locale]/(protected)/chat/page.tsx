@@ -2,6 +2,7 @@ import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getChatListForUser } from "@/lib/supabase/queries/chats";
+import { getProfileIdByUserId } from "@/lib/supabase/queries/profiles";
 import type { ChatWithPartner } from "@/lib/supabase/queries/chats";
 
 export default async function ChatListPage() {
@@ -15,7 +16,10 @@ export default async function ChatListPage() {
   let chats: ChatWithPartner[] = [];
   if (user) {
     try {
-      chats = await getChatListForUser(supabase, user.id);
+      const profileId = await getProfileIdByUserId(supabase, user.id);
+      if (profileId) {
+        chats = await getChatListForUser(supabase, profileId);
+      }
     } catch {
       // Fail silently – empty state is shown below
     }

@@ -1,4 +1,5 @@
 import { startChat, sendMessage } from "@/actions/chat";
+import { getProfileIdByUserId } from "@/lib/supabase/queries/profiles";
 
 // ---------------------------------------------------------------------------
 // Mocks
@@ -12,6 +13,10 @@ jest.mock("next/navigation", () => ({
   redirect: jest.fn((url: string) => {
     throw new Error(`REDIRECT:${url}`);
   }),
+}));
+
+jest.mock("@/lib/supabase/queries/profiles", () => ({
+  getProfileIdByUserId: jest.fn(),
 }));
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -39,8 +44,12 @@ afterEach(() => jest.clearAllMocks());
 // ---------------------------------------------------------------------------
 
 const CURRENT_USER = { id: "user-a" };
+const CURRENT_PROFILE_ID = "profile-a";
 const OTHER_USER_ID = "user-b";
 const CHAT_ID = "chat-uuid-123";
+
+const mockGetProfileIdByUserId =
+  getProfileIdByUserId as jest.MockedFunction<typeof getProfileIdByUserId>;
 
 function makeFormData(): FormData {
   return new FormData();
@@ -80,6 +89,7 @@ describe("startChat()", () => {
       data: { user: CURRENT_USER },
       error: null,
     });
+    mockGetProfileIdByUserId.mockResolvedValue(CURRENT_PROFILE_ID);
   });
 
   it("redirects to the existing chat when one already exists", async () => {
@@ -128,10 +138,7 @@ describe("startChat()", () => {
   });
 
   it("returns invalid_request when trying to chat with self", async () => {
-    mockGetUser.mockResolvedValue({
-      data: { user: { id: OTHER_USER_ID } },
-      error: null,
-    });
+    mockGetProfileIdByUserId.mockResolvedValue(OTHER_USER_ID);
     await expect(startChat(OTHER_USER_ID, makeFormData())).rejects.toThrow(
       "invalid_request"
     );
@@ -161,6 +168,7 @@ describe("sendMessage()", () => {
       data: { user: CURRENT_USER },
       error: null,
     });
+    mockGetProfileIdByUserId.mockResolvedValue(CURRENT_PROFILE_ID);
   });
 
   it("returns success when message is inserted", async () => {

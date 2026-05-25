@@ -1,4 +1,8 @@
-import { getProfileById, getMatches } from "@/lib/supabase/queries/profiles";
+import {
+  getProfileById,
+  getMatches,
+  getProfileIdByUserId,
+} from "@/lib/supabase/queries/profiles";
 import type { Profile } from "@/types/supabase";
 
 // Minimal profile fixture used across tests.
@@ -76,6 +80,36 @@ describe("getProfileById()", () => {
       getProfileById(
         mock as unknown as Parameters<typeof getProfileById>[0],
         "user-1"
+      )
+    ).rejects.toThrow("DB error");
+  });
+});
+
+describe("getProfileIdByUserId()", () => {
+  it("returns profile id when found", async () => {
+    const mock = buildMockClient({ data: { id: "profile-1" }, error: null });
+    const result = await getProfileIdByUserId(
+      mock as unknown as Parameters<typeof getProfileIdByUserId>[0],
+      "auth-user-1"
+    );
+    expect(result).toBe("profile-1");
+  });
+
+  it("returns null when profile does not exist", async () => {
+    const mock = buildMockClient({ data: null, error: null });
+    const result = await getProfileIdByUserId(
+      mock as unknown as Parameters<typeof getProfileIdByUserId>[0],
+      "auth-user-1"
+    );
+    expect(result).toBeNull();
+  });
+
+  it("throws when Supabase returns an error", async () => {
+    const mock = buildMockClient({ data: null, error: new Error("DB error") });
+    await expect(
+      getProfileIdByUserId(
+        mock as unknown as Parameters<typeof getProfileIdByUserId>[0],
+        "auth-user-1"
       )
     ).rejects.toThrow("DB error");
   });

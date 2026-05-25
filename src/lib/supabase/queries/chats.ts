@@ -8,18 +8,18 @@ export type ChatWithPartner = Chat & {
 type Client = SupabaseClient<Database>;
 
 /**
- * Returns all chats the current user participates in,
+ * Returns all chats the current profile participates in,
  * ordered by creation date descending (most recent first).
  * RLS ensures only the user's own chats are returned.
  */
 export async function getChatsByUserId(
   client: Client,
-  userId: string
+  profileId: string
 ): Promise<Chat[]> {
   const { data, error } = await client
     .from("chats")
     .select("*")
-    .or(`user1_id.eq.${userId},user2_id.eq.${userId}`)
+    .or(`user1_id.eq.${profileId},user2_id.eq.${profileId}`)
     .order("created_at", { ascending: false });
 
   if (error) throw error;
@@ -45,19 +45,19 @@ export async function getChatById(
 }
 
 /**
- * Returns all chats for the given user, enriched with the partner's profile
+ * Returns all chats for the given profile, enriched with the partner's profile
  * name. Performs a single batch profile lookup to avoid N+1 queries.
  */
 export async function getChatListForUser(
   client: Client,
-  userId: string
+  profileId: string
 ): Promise<ChatWithPartner[]> {
-  const chats = await getChatsByUserId(client, userId);
+  const chats = await getChatsByUserId(client, profileId);
   if (chats.length === 0) return [];
 
   const partnerIds = [
     ...new Set(
-      chats.map((c) => (c.user1_id === userId ? c.user2_id : c.user1_id))
+      chats.map((c) => (c.user1_id === profileId ? c.user2_id : c.user1_id))
     ),
   ];
 
@@ -74,7 +74,7 @@ export async function getChatListForUser(
 
   return chats.map((chat) => {
     const partnerId =
-      chat.user1_id === userId ? chat.user2_id : chat.user1_id;
+      chat.user1_id === profileId ? chat.user2_id : chat.user1_id;
     const partner = profileMap.get(partnerId) ?? { id: partnerId, name: "—" };
     return { ...chat, partner };
   });

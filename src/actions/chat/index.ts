@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { getLocale } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { sendMessageSchema } from "@/lib/validation/chat";
+import { getProfileIdByUserId } from "@/lib/supabase/queries/profiles";
 
 // ---------------------------------------------------------------------------
 // Shared result type
@@ -42,15 +43,24 @@ export async function startChat(
 
   if (userError || !user) throw new Error("auth_required");
 
+  let currentProfileId: string | null = null;
+  try {
+    currentProfileId = await getProfileIdByUserId(supabase, user.id);
+  } catch {
+    throw new Error("start_failed");
+  }
+
+  if (!currentProfileId) throw new Error("start_failed");
+
   // Guard: cannot chat with yourself
-  if (user.id === otherUserId) throw new Error("invalid_request");
+  if (currentProfileId === otherUserId) throw new Error("invalid_request");
 
   // Check for an existing chat room (direction-agnostic)
   const { data: existing, error: lookupError } = await supabase
     .from("chats")
     .select("id")
     .or(
-      `and(user1_id.eq.${user.id},user2_id.eq.${otherUserId}),and(user1_id.eq.${otherUserId},user2_id.eq.${user.id})`
+      `and(user1_id.eq.${currentProfileId},user2_id.eq.${otherUserId}),and(user1_id.eq.${otherUserId},user2_id.eq.${currentProfileId})`
     )
     .maybeSingle();
 
@@ -63,7 +73,7 @@ export async function startChat(
   } else {
     const { data: created, error: createError } = await supabase
       .from("chats")
-      .insert({ user1_id: user.id, user2_id: otherUserId })
+      .insert({ user1_id: currentProfileId, user2_id: otherUserId })
       .select("id")
       .single();
 
@@ -99,19 +109,28 @@ export async function sendMessage(
 
   if (userError || !user) return { error: "auth_required" };
 
+  let currentProfileId: string | null = null;
+  try {
+    currentProfileId = await getProfileIdByUserId(supabase, user.id);
+  } catch {
+    return { error: "unauthorized" };
+  }
+
+  if (!currentProfileId) return { error: "unauthorized" };
+
   // Verify the caller is a participant to prevent unauthorised writes
   const { data: chat, error: chatError } = await supabase
     .from("chats")
     .select("id")
     .eq("id", chatId)
-    .or(`user1_id.eq.${user.id},user2_id.eq.${user.id}`)
+    .or(`user1_id.eq.${currentProfileId},user2_id.eq.${currentProfileId}`)
     .maybeSingle();
 
   if (chatError || !chat) return { error: "unauthorized" };
 
   const { error: msgError } = await supabase.from("messages").insert({
     chat_id: chatId,
-    sender_id: user.id,
+    sender_id: currentProfileId,
     content: parsed.data.content,
   });
 

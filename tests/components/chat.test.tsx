@@ -13,6 +13,11 @@ beforeAll(() => {
 // Mock Supabase browser client with a no-op realtime channel
 jest.mock("@/lib/supabase/browser", () => ({
   createClient: jest.fn(() => ({
+    auth: {
+      getSession: jest.fn().mockResolvedValue({
+        data: { session: { access_token: "token" } },
+      }),
+    },
     channel: jest.fn().mockReturnValue({
       on: jest.fn().mockReturnThis(),
       subscribe: jest.fn().mockReturnThis(),

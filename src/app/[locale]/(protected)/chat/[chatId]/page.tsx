@@ -4,7 +4,7 @@ import { Link } from "@/i18n/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getChatById } from "@/lib/supabase/queries/chats";
 import { getMessagesByChatId } from "@/lib/supabase/queries/messages";
-import { getProfileById } from "@/lib/supabase/queries/profiles";
+import { getProfileById, getProfileIdByUserId } from "@/lib/supabase/queries/profiles";
 import ChatThread from "@/components/chat/ChatThread";
 
 interface ChatPageProps {
@@ -22,6 +22,15 @@ export default async function ChatThreadPage({ params }: ChatPageProps) {
 
   if (!user) notFound();
 
+  let currentProfileId: string | null = null;
+  try {
+    currentProfileId = await getProfileIdByUserId(supabase, user.id);
+  } catch {
+    notFound();
+  }
+
+  if (!currentProfileId) notFound();
+
   // Fetch chat, messages, and partner profile in parallel
   let chat: Awaited<ReturnType<typeof getChatById>> = null;
   try {
@@ -33,9 +42,12 @@ export default async function ChatThreadPage({ params }: ChatPageProps) {
   if (!chat) notFound();
 
   // Authorization: caller must be a participant
-  if (chat.user1_id !== user.id && chat.user2_id !== user.id) notFound();
+  if (chat.user1_id !== currentProfileId && chat.user2_id !== currentProfileId) {
+    notFound();
+  }
 
-  const partnerId = chat.user1_id === user.id ? chat.user2_id : chat.user1_id;
+  const partnerId =
+    chat.user1_id === currentProfileId ? chat.user2_id : chat.user1_id;
 
   const [messages, partnerProfile] = await Promise.all([
     getMessagesByChatId(supabase, chatId).catch(() => []),
@@ -69,7 +81,7 @@ export default async function ChatThreadPage({ params }: ChatPageProps) {
       <ChatThread
         chatId={chatId}
         initialMessages={messages}
-        currentUserId={user.id}
+        currentUserId={currentProfileId}
         tYou={t("chat.you")}
         tPlaceholder={t("chat.message_placeholder")}
         tSend={t("chat.send")}

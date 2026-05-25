@@ -39,6 +39,24 @@ export async function getProfileById(
 }
 
 /**
+ * Resolves a profile UUID from an authenticated Supabase user UUID.
+ * Returns null when onboarding has not created a profile yet.
+ */
+export async function getProfileIdByUserId(
+  client: Client,
+  userId: string
+): Promise<string | null> {
+  const { data, error } = await client
+    .from("profiles")
+    .select("id")
+    .eq("user_id", userId)
+    .maybeSingle();
+
+  if (error) throw error;
+  return data?.id ?? null;
+}
+
+/**
  * Returns active profiles of the opposite gender that satisfy the caller's
  * partner preferences.  RLS enforces the opposite-gender + active-profile
  * filter at the DB layer; this query further narrows by age, marital status,

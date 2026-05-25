@@ -44,32 +44,78 @@ export default function ChatThread({
   // ── Realtime subscription ────────────────────────────────────────────────
   useEffect(() => {
     const supabase = createClient();
+    let disposed = false;
+    let retryTimer: ReturnType<typeof setTimeout> | null = null;
+    let channel: ReturnType<typeof supabase.channel> | null = null;
 
-    const channel = supabase
-      .channel(`chat:${chatId}`)
-      .on(
-        "postgres_changes",
-        {
-          event: "INSERT",
-          schema: "public",
-          table: "messages",
-          filter: `chat_id=eq.${chatId}`,
-        },
-        (payload) => {
-          const incoming = payload.new as Message;
-          // Only handle messages from the other participant;
-          // the sender's own messages are added optimistically.
-          if (incoming.sender_id === currentUserId) return;
-          setMessages((prev) => {
-            if (prev.some((m) => m.id === incoming.id)) return prev;
-            return [...prev, incoming];
-          });
-        }
-      )
-      .subscribe();
+    const clearRetry = () => {
+      if (retryTimer) {
+        clearTimeout(retryTimer);
+        retryTimer = null;
+      }
+    };
+
+    const scheduleRetry = () => {
+      if (disposed || retryTimer) return;
+      retryTimer = setTimeout(() => {
+        retryTimer = null;
+        void subscribeToChanges();
+      }, 1200);
+    };
+
+    const subscribeToChanges = async () => {
+      if (disposed) return;
+
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (!session) {
+        // Session hydration can lag right after navigation.
+        // Retry so the channel joins with the authenticated token.
+        scheduleRetry();
+        return;
+      }
+
+      channel = supabase
+        .channel(`chat:${chatId}`)
+        .on(
+          "postgres_changes",
+          {
+            event: "INSERT",
+            schema: "public",
+            table: "messages",
+            filter: `chat_id=eq.${chatId}`,
+          },
+          (payload) => {
+            const incoming = payload.new as Message;
+            // Only handle messages from the other participant;
+            // the sender's own messages are added optimistically.
+            if (incoming.sender_id === currentUserId) return;
+            setMessages((prev) => {
+              if (prev.some((m) => m.id === incoming.id)) return prev;
+              return [...prev, incoming];
+            });
+          }
+        )
+        .subscribe((status) => {
+          if (disposed) return;
+          if (status === "TIMED_OUT" || status === "CHANNEL_ERROR") {
+            if (channel) {
+              void supabase.removeChannel(channel);
+              channel = null;
+            }
+            scheduleRetry();
+          }
+        });
+    };
+
+    void subscribeToChanges();
 
     return () => {
-      supabase.removeChannel(channel);
+      disposed = true;
+      clearRetry();
+      if (channel) void supabase.removeChannel(channel);
     };
   }, [chatId, currentUserId]);
 
