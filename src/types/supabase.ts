@@ -55,6 +55,7 @@ export type Profile = {
   deleted_at: string | null;
   created_at: string;
   updated_at: string;
+  user_id: string | null;
 };
 
 export type PartnerPreference = {
@@ -106,9 +107,9 @@ export type MessageInsert = Omit<Message, "id" | "is_read" | "created_at">;
 // Update types (all fields optional; immutable fields excluded)
 // ---------------------------------------------------------------------------
 
-/** gender and date_of_birth are immutable; excluded from update type. */
+/** gender, date_of_birth, and user_id are immutable; excluded from update type. */
 export type ProfileUpdate = Partial<
-  Omit<Profile, "id" | "gender" | "date_of_birth" | "created_at">
+  Omit<Profile, "id" | "user_id" | "gender" | "date_of_birth" | "created_at">
 >;
 
 export type PartnerPreferenceUpdate = Partial<

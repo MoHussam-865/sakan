@@ -59,6 +59,7 @@ SQL
 -- PROFILES TABLE
 CREATE TABLE profiles (
     id UUID REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
+    user_id UUID REFERENCES auth.users(id),
     name TEXT NOT NULL,
     gender gender_type NOT NULL,
     date_of_birth DATE NOT NULL,

@@ -20,10 +20,11 @@ CREATE TYPE hijab_status_type AS ENUM ('none', 'hijab', 'niqab');
 -- ---------------------------------------------------------------------------
 
 -- PROFILES TABLE
--- One row per authenticated user. Linked to auth.users via id.
--- gender and date_of_birth are immutable after creation (enforced in app layer).
+-- One row per authenticated user. Linked to auth.users via both id (PK) and
+-- user_id (explicit FK). gender and date_of_birth are immutable after creation.
 CREATE TABLE profiles (
     id                      UUID REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
+    user_id                 UUID REFERENCES auth.users(id),
     name                    TEXT NOT NULL,
     gender                  gender_type NOT NULL,
     date_of_birth           DATE NOT NULL,

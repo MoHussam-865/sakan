@@ -99,6 +99,7 @@ export async function finalizeOnboarding(
     health_status: health_status ?? null,
     about_me: about_me ?? null,
     deleted_at: null,
+    user_id: user.id,
   };
 
   const prefUpsert: PartnerPreferenceInsert = {
