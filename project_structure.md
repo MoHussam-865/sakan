@@ -11,7 +11,7 @@ sakan/
 ├── tsconfig.json                                  # TypeScript configuration (strict mode, path aliases)
 │
 ├── messages/                                      # i18n string dictionaries (no hardcoded strings in UI)
-│   ├── en.json                                    # English – namespaces: common, nav, locale_switcher, auth, onboarding, dashboard, profile, chat, enums
+│   ├── en.json                                    # English – namespaces: common, nav, locale_switcher, auth, onboarding, dashboard, preferences, profile, chat, enums
 │   └── ar.json                                    # Arabic  – same namespace structure as en.json
 │
 ├── supabase/
@@ -30,7 +30,9 @@ sakan/
 │   │   ├── auth/
 │   │   │   └── index.ts                           # requestOtp(), verifyOtp(), signOut() – OTP auth Server Actions
 │   │   ├── onboarding/
-│   │   │   └── index.ts                           # saveOnboardingStep1-4() – partial-upsert Server Actions per wizard step; step 4 redirects to dashboard
+│   │   │   └── index.ts                           # finalizeOnboarding() – validates full payload, upserts profile + preferences, redirects to dashboard
+│   │   ├── preferences/
+│   │   │   └── index.ts                           # updatePreferences() – validates and upserts partner_preferences for the authenticated user
 │   │   └── chat/                                  # Chat Server Actions (create chat, send message) – Phase 8
 │   │
 │   ├── app/
@@ -72,7 +74,7 @@ sakan/
 │   │   │   └── OtpForm.tsx                        # Two-step OTP form – email step → code step; uses useActionState with Server Actions
 │   │   ├── matches/
 │   │   │   ├── MatchCard.tsx                      # Client Component – profile summary card; links to detail view, shows age, city, education
-│   │   │   └── MatchEmptyState.tsx                # Client Component – empty state shown when the preference query returns no results
+│   │   │   └── MatchEmptyState.tsx                # Client Component – empty state with a Link button to /preferences when no matches are found
 │   │   ├── onboarding/
 │   │   │   ├── OnboardingWizard.tsx               # Client Component – manages current step state, calls Server Actions via useTransition
 │   │   │   ├── StepProgressBar.tsx                # Step progress indicator – dots + connectors; aria-current on active step

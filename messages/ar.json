@@ -105,8 +105,18 @@
     "subtitle": "الأشخاص الذين يتطابقون مع تفضيلاتك",
     "no_matches": "لا توجد تطابقات",
     "no_matches_hint": "حدّث تفضيلاتك لرؤية المزيد من التطابقات",
+    "update_preferences": "تحديث التفضيلات",
     "view_profile": "عرض الملف الشخصي",
     "start_chat": "بدء المحادثة"
+  },
+  "preferences": {
+    "title": "تفضيلات التطابق",
+    "subtitle": "عدّل هذه الفلاتر للحصول على تطابقات أفضل",
+    "save": "حفظ التفضيلات",
+    "saved": "تم حفظ التفضيلات!",
+    "back_to_matches": "العودة للتطابقات",
+    "partner_description_label": "ماذا تبحث عن؟",
+    "partner_description_placeholder": "صف نوع الشخص الذي تأمل في لقائه…"
   },
   "profile": {
     "title": "الملف الشخصي",

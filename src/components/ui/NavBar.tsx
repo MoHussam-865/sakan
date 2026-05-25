@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils/cn";
 export default function NavBar() {
   const tNav = useTranslations("nav");
   const tCommon = useTranslations("common");
+  const tPref = useTranslations("preferences");
   const pathname = usePathname();
 
   return (
@@ -41,6 +42,19 @@ export default function NavBar() {
             )}
           >
             {tNav("dashboard")}
+          </Link>
+
+          <Link
+            href="/preferences"
+            aria-current={pathname === "/preferences" ? "page" : undefined}
+            className={cn(
+              "text-sm transition-colors",
+              pathname === "/preferences"
+                ? "text-slate-900 font-medium"
+                : "text-slate-500 hover:text-slate-900"
+            )}
+          >
+            {tPref("title")}
           </Link>
 
           <form action={signOut}>

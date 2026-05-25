@@ -105,8 +105,18 @@
     "subtitle": "People who match your preferences",
     "no_matches": "No matches found",
     "no_matches_hint": "Update your preferences to see more matches",
+    "update_preferences": "Update preferences",
     "view_profile": "View profile",
     "start_chat": "Start conversation"
+  },
+  "preferences": {
+    "title": "Match Preferences",
+    "subtitle": "Adjust these filters to find better matches",
+    "save": "Save preferences",
+    "saved": "Preferences saved!",
+    "back_to_matches": "Back to matches",
+    "partner_description_label": "What are you looking for?",
+    "partner_description_placeholder": "Describe the kind of person you are hoping to meet…"
   },
   "profile": {
     "title": "Profile",
