@@ -19,7 +19,7 @@ export default function NavBar() {
       href={href}
       aria-current={pathname === href ? "page" : undefined}
       className={cn(
-        "text-sm transition-colors",
+        "text-sm transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2 focus-visible:ring-offset-stone-50",
         pathname === href
           ? "text-slate-900 font-medium"
           : "text-slate-500 hover:text-slate-900"
@@ -32,13 +32,13 @@ export default function NavBar() {
   return (
     <nav
       className="sticky top-0 z-10 bg-stone-50/90 backdrop-blur-sm border-b border-slate-200"
-      aria-label="Main navigation"
+      aria-label={tNav("main_navigation")}
     >
       <div className="max-w-4xl mx-auto px-4 h-14 flex items-center justify-between">
         {/* Brand */}
         <Link
           href="/dashboard"
-          className="font-semibold text-slate-900 text-sm tracking-tight"
+          className="font-semibold text-slate-900 text-sm tracking-tight rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2 focus-visible:ring-offset-stone-50"
         >
           {tCommon("app_name")}
         </Link>
@@ -52,7 +52,7 @@ export default function NavBar() {
           <form action={signOut}>
             <button
               type="submit"
-              className="text-sm text-slate-500 hover:text-slate-900 transition-colors"
+              className="text-sm text-slate-500 hover:text-slate-900 transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2 focus-visible:ring-offset-stone-50"
             >
               {tNav("sign_out")}
             </button>

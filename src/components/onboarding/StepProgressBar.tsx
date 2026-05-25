@@ -4,15 +4,21 @@ type Props = {
   currentStep: number;
   totalSteps: number;
   stepLabels: string[];
+  ariaLabel: string;
 };
 
 /**
  * Minimal step progress indicator – dots connected by thin lines.
  * Uses aria-current="step" on the active dot for screen-reader support.
  */
-export function StepProgressBar({ currentStep, totalSteps, stepLabels }: Props) {
+export function StepProgressBar({
+  currentStep,
+  totalSteps,
+  stepLabels,
+  ariaLabel,
+}: Props) {
   return (
-    <nav aria-label="Onboarding progress" className="w-full">
+    <nav aria-label={ariaLabel} className="w-full">
       <div className="flex items-center">
         {Array.from({ length: totalSteps }, (_, i) => {
           const stepNum = i + 1;

@@ -60,7 +60,7 @@ describe("LocaleSwitcher", () => {
     useLocale.mockReturnValue("en");
     render(<LocaleSwitcher />);
     const activeLink = screen.getByText("EN").closest("a");
-    expect(activeLink).toHaveAttribute("aria-current", "true");
+    expect(activeLink).toHaveAttribute("aria-current", "page");
   });
 
   it("does not set aria-current on the inactive locale", () => {

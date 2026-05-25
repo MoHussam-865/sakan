@@ -32,12 +32,12 @@ export default function LocaleSwitcher() {
               <Link
                 href={pathname}
                 locale={locale}
-                aria-current={isActive ? "true" : undefined}
+                aria-current={isActive ? "page" : undefined}
                 className={cn(
-                  "text-xs font-medium tracking-wide uppercase transition-colors",
+                  "text-xs font-medium tracking-wide uppercase transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2 focus-visible:ring-offset-stone-50",
                   isActive
                     ? "text-slate-900 cursor-default pointer-events-none"
-                    : "text-slate-400 hover:text-slate-700"
+                    : "text-slate-500 hover:text-slate-900"
                 )}
               >
                 {t(locale)}

@@ -62,7 +62,7 @@ export default async function ChatThreadPage({ params }: ChatPageProps) {
       <div className="flex items-center gap-4 px-4 py-4 border-b border-slate-200 bg-stone-50 shrink-0">
         <Link
           href="/chat"
-          className="text-sm text-slate-500 hover:text-slate-900 transition-colors"
+          className="text-sm text-slate-500 hover:text-slate-900 transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2"
           aria-label={t("common.back")}
         >
           ←
@@ -82,7 +82,9 @@ export default async function ChatThreadPage({ params }: ChatPageProps) {
         chatId={chatId}
         initialMessages={messages}
         currentUserId={currentProfileId}
+        partnerName={partnerName}
         tYou={t("chat.you")}
+        tMessageHistory={t("chat.message_history")}
         tPlaceholder={t("chat.message_placeholder")}
         tSend={t("chat.send")}
         tSendFailed={t("chat.send_failed")}

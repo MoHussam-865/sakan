@@ -64,7 +64,9 @@ const defaultProps = {
   chatId: CHAT_ID,
   initialMessages: messages,
   currentUserId: CURRENT_USER_ID,
+  partnerName: "Fatima",
   tYou: "You",
+  tMessageHistory: "Message history",
   tPlaceholder: "Write a message…",
   tSend: "Send",
   tSendFailed: "Failed to send. Please try again.",
@@ -87,6 +89,9 @@ describe("ChatThread – rendering", () => {
 
   it("renders the message input and send button", () => {
     setup();
+    expect(
+      screen.getByLabelText("Message history")
+    ).toBeInTheDocument();
     expect(
       screen.getByPlaceholderText("Write a message…")
     ).toBeInTheDocument();

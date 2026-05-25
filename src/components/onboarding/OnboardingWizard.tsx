@@ -135,16 +135,17 @@ export function OnboardingWizard({ existingProfile, existingPreferences }: Props
   }
 
   return (
-    <div className="bg-white p-8 rounded-2xl border border-slate-100 shadow-sm w-full max-w-lg flex flex-col gap-8">
-      {/* Progress */}
-      <StepProgressBar
-        currentStep={step}
-        totalSteps={TOTAL_STEPS}
-        stepLabels={stepLabels}
-      />
+    <div className="w-full max-w-lg rounded-2xl border border-slate-200 bg-white divide-y divide-slate-100">
+      <div className="px-6 py-5">
+        <StepProgressBar
+          currentStep={step}
+          totalSteps={TOTAL_STEPS}
+          stepLabels={stepLabels}
+          ariaLabel={t("progress_label")}
+        />
+      </div>
 
-      {/* Step heading */}
-      <div>
+      <div className="px-6 py-6">
         <p className="text-xs uppercase tracking-widest text-slate-500 mb-1">
           {t("step_of", { current: step, total: TOTAL_STEPS })}
         </p>
@@ -153,79 +154,81 @@ export function OnboardingWizard({ existingProfile, existingPreferences }: Props
         </h2>
       </div>
 
-      {/* Server-level error */}
-      {serverError && (
-        <p role="alert" className="text-sm text-red-600">
-          {t(serverError as Parameters<typeof t>[0])}
-        </p>
-      )}
+      <div className="px-6 py-6">
+        {/* Server-level error */}
+        {serverError && (
+          <p role="alert" className="text-sm text-red-600 mb-4">
+            {t(serverError as Parameters<typeof t>[0])}
+          </p>
+        )}
 
-      {/* Step forms */}
-      {step === 1 && (
-        <Step1Form
-          isPending={isPending}
-          defaultValues={{
-            name: onboardingData.name,
-            gender: onboardingData.gender,
-            date_of_birth: onboardingData.date_of_birth,
-            nationality: onboardingData.nationality,
-            country: onboardingData.country,
-            city: onboardingData.city,
-          }}
-          onSubmit={handleStep1Submit}
-        />
-      )}
+        {/* Step forms */}
+        {step === 1 && (
+          <Step1Form
+            isPending={isPending}
+            defaultValues={{
+              name: onboardingData.name,
+              gender: onboardingData.gender,
+              date_of_birth: onboardingData.date_of_birth,
+              nationality: onboardingData.nationality,
+              country: onboardingData.country,
+              city: onboardingData.city,
+            }}
+            onSubmit={handleStep1Submit}
+          />
+        )}
 
-      {step === 2 && (
-        <Step2Form
-          isPending={isPending}
-          defaultValues={{
-            height_cm: onboardingData.height_cm,
-            weight_kg: onboardingData.weight_kg,
-            skin_color: onboardingData.skin_color,
-            health_status: onboardingData.health_status,
-            smoking_status: onboardingData.smoking_status,
-          }}
-          onSubmit={handleStep2Submit}
-          onBack={() => goTo(1)}
-        />
-      )}
+        {step === 2 && (
+          <Step2Form
+            isPending={isPending}
+            defaultValues={{
+              height_cm: onboardingData.height_cm,
+              weight_kg: onboardingData.weight_kg,
+              skin_color: onboardingData.skin_color,
+              health_status: onboardingData.health_status,
+              smoking_status: onboardingData.smoking_status,
+            }}
+            onSubmit={handleStep2Submit}
+            onBack={() => goTo(1)}
+          />
+        )}
 
-      {step === 3 && (
-        <Step3Form
-          isPending={isPending}
-          gender={onboardingData.gender}
-          defaultValues={{
-            education_level: onboardingData.education_level,
-            job_title: onboardingData.job_title,
-            marital_status: onboardingData.marital_status,
-            has_children: onboardingData.has_children,
-            children_count: onboardingData.children_count,
-            children_living_with_me: onboardingData.children_living_with_me,
-            religious_commitment: onboardingData.religious_commitment,
-            hijab_status: onboardingData.hijab_status,
-            beard_status: onboardingData.beard_status,
-          }}
-          onSubmit={handleStep3Submit}
-          onBack={() => goTo(2)}
-        />
-      )}
+        {step === 3 && (
+          <Step3Form
+            isPending={isPending}
+            gender={onboardingData.gender}
+            defaultValues={{
+              education_level: onboardingData.education_level,
+              job_title: onboardingData.job_title,
+              marital_status: onboardingData.marital_status,
+              has_children: onboardingData.has_children,
+              children_count: onboardingData.children_count,
+              children_living_with_me: onboardingData.children_living_with_me,
+              religious_commitment: onboardingData.religious_commitment,
+              hijab_status: onboardingData.hijab_status,
+              beard_status: onboardingData.beard_status,
+            }}
+            onSubmit={handleStep3Submit}
+            onBack={() => goTo(2)}
+          />
+        )}
 
-      {step === 4 && (
-        <Step4Form
-          isPending={isPending}
-          defaultValues={{
-            about_me: onboardingData.about_me,
-            partner_description: onboardingData.partner_description,
-            min_age: onboardingData.min_age,
-            max_age: onboardingData.max_age,
-            accepted_marital_statuses: onboardingData.accepted_marital_statuses,
-            accepted_education_levels: onboardingData.accepted_education_levels,
-          }}
-          onSubmit={handleStep4Submit}
-          onBack={() => goTo(3)}
-        />
-      )}
+        {step === 4 && (
+          <Step4Form
+            isPending={isPending}
+            defaultValues={{
+              about_me: onboardingData.about_me,
+              partner_description: onboardingData.partner_description,
+              min_age: onboardingData.min_age,
+              max_age: onboardingData.max_age,
+              accepted_marital_statuses: onboardingData.accepted_marital_statuses,
+              accepted_education_levels: onboardingData.accepted_education_levels,
+            }}
+            onSubmit={handleStep4Submit}
+            onBack={() => goTo(3)}
+          />
+        )}
+      </div>
     </div>
   );
 }

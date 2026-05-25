@@ -41,13 +41,13 @@ export default async function ChatListPage() {
             className="w-14 h-14 rounded-full border-2 border-slate-200 flex items-center justify-center"
             aria-hidden="true"
           >
-            <span className="text-slate-400 text-xl">💬</span>
+            <span className="text-slate-500 text-xl">💬</span>
           </div>
           <p className="text-slate-900 font-medium">{t("chat.no_chats")}</p>
           <p className="text-sm text-slate-500">{t("chat.no_chats_hint")}</p>
           <Link
             href="/dashboard"
-            className="mt-2 text-sm font-medium text-slate-900 underline underline-offset-4 hover:text-slate-700 transition-colors"
+            className="mt-2 text-sm font-medium text-slate-900 underline underline-offset-4 hover:text-slate-700 transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2"
           >
             {t("dashboard.title")}
           </Link>
@@ -59,7 +59,7 @@ export default async function ChatListPage() {
             <li key={chat.id}>
               <Link
                 href={`/chat/${chat.id}`}
-                className="flex items-center gap-4 py-4 hover:bg-slate-50 -mx-2 px-2 rounded-lg transition-colors"
+                className="flex items-center gap-4 py-4 hover:bg-slate-50 -mx-2 px-2 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2"
               >
                 {/* Avatar placeholder */}
                 <div
@@ -71,7 +71,7 @@ export default async function ChatListPage() {
                   {chat.partner.name}
                 </span>
                 {/* Chevron */}
-                <span className="text-slate-400 text-sm" aria-hidden="true">
+                <span className="text-slate-500 text-sm" aria-hidden="true">
                   →
                 </span>
               </Link>

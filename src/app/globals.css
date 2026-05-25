@@ -2,6 +2,9 @@
 
 :root {
   --background: #FAFAFA;
+  --surface: #ffffff;
+  --surface-muted: #f8fafc;
+  --border-subtle: #e2e8f0;
   --foreground: #0f172a;
 }
 
@@ -13,8 +16,35 @@
 }
 
 body {
-  background: var(--background);
+  background:
+    radial-gradient(circle at 12% -20%, #f1f5f9 0%, transparent 46%),
+    radial-gradient(circle at 88% 0%, #fff7ed 0%, transparent 34%),
+    var(--background);
   color: var(--foreground);
   font-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #94a3b8 transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+  border-radius: 9999px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
 }

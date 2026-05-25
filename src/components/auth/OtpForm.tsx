@@ -84,7 +84,7 @@ function EmailStep({
           disabled={isPending}
           className={cn(
             "w-full px-4 py-3 rounded-xl border border-slate-200 bg-transparent text-slate-900",
-            "placeholder:text-slate-400 focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition-all",
+            "placeholder:text-slate-400 focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 focus-visible:ring-2 focus-visible:ring-offset-2 transition-all",
             "disabled:opacity-50 disabled:cursor-not-allowed",
             state.fieldError && "border-red-500 focus:border-red-500 focus:ring-red-500"
           )}
@@ -101,7 +101,7 @@ function EmailStep({
         type="submit"
         disabled={isPending}
         className={cn(
-          "w-full py-3 mt-4 rounded-xl bg-slate-900 text-white font-medium hover:bg-slate-800 transition-colors",
+          "w-full py-3 mt-4 rounded-xl bg-slate-900 text-white font-medium hover:bg-slate-800 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2",
           "disabled:opacity-50 disabled:cursor-not-allowed"
         )}
       >
@@ -164,7 +164,7 @@ function OtpStep({
           disabled={isPending}
           className={cn(
             "w-full px-4 py-3 rounded-xl border border-slate-200 bg-transparent text-slate-900 tracking-widest",
-            "placeholder:text-slate-400 placeholder:tracking-normal focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition-all",
+            "placeholder:text-slate-400 placeholder:tracking-normal focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 focus-visible:ring-2 focus-visible:ring-offset-2 transition-all",
             "disabled:opacity-50 disabled:cursor-not-allowed",
             state.error && "border-red-500 focus:border-red-500 focus:ring-red-500"
           )}
@@ -175,7 +175,7 @@ function OtpStep({
         type="submit"
         disabled={isPending}
         className={cn(
-          "w-full py-3 mt-4 rounded-xl bg-slate-900 text-white font-medium hover:bg-slate-800 transition-colors",
+          "w-full py-3 mt-4 rounded-xl bg-slate-900 text-white font-medium hover:bg-slate-800 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2",
           "disabled:opacity-50 disabled:cursor-not-allowed"
         )}
       >
@@ -187,7 +187,7 @@ function OtpStep({
         onClick={onResend}
         disabled={isPending}
         className={cn(
-          "text-sm text-slate-500 underline-offset-4 hover:underline hover:text-slate-700",
+          "text-sm text-slate-500 underline-offset-4 hover:underline hover:text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2 rounded-sm",
           "disabled:opacity-50 disabled:cursor-not-allowed",
           "transition-colors duration-150"
         )}

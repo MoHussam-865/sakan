@@ -23,12 +23,13 @@ export default function MatchCard({ profile }: MatchCardProps) {
       href={`/profile/${profile.id}`}
       className={cn(
         "group flex flex-col p-5 rounded-2xl border border-slate-200 bg-white",
-        "hover:border-slate-300 hover:bg-slate-50 transition-all duration-150"
+        "hover:border-slate-300 hover:bg-slate-50 transition-all duration-150",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2"
       )}
     >
       {/* Avatar placeholder */}
       <div
-        className="w-10 h-10 rounded-full bg-stone-200 mb-4 shrink-0"
+        className="w-10 h-10 rounded-full border-2 border-slate-200 mb-4 shrink-0"
         aria-hidden="true"
       />
 
@@ -49,7 +50,7 @@ export default function MatchCard({ profile }: MatchCardProps) {
       </div>
 
       {/* CTA hint */}
-      <span className="mt-5 text-xs font-medium text-slate-400 group-hover:text-slate-700 transition-colors">
+      <span className="mt-5 text-xs font-medium text-slate-500 group-hover:text-slate-900 transition-colors">
         {t("dashboard.view_profile")} →
       </span>
     </Link>

@@ -50,7 +50,7 @@ function Field({
 function inputCls(hasError?: boolean) {
   return cn(
     "w-full px-4 py-3 rounded-xl border border-slate-200 bg-transparent text-slate-900",
-    "placeholder:text-slate-400 focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition-all",
+    "placeholder:text-slate-400 focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 focus-visible:ring-2 focus-visible:ring-offset-2 transition-all",
     "disabled:opacity-50 disabled:cursor-not-allowed",
     hasError && "border-red-400 focus:border-red-500 focus:ring-red-400"
   );
@@ -88,6 +88,7 @@ export function Step1Form({ defaultValues, isPending, onSubmit }: Props) {
     },
   });
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const selectedGender = watch("gender");
 
   return (
@@ -107,7 +108,7 @@ export function Step1Form({ defaultValues, isPending, onSubmit }: Props) {
           id="name"
           type="text"
           autoComplete="name"
-          placeholder="Ali Al-Mansouri"
+          placeholder={t("name_placeholder")}
           disabled={isPending}
           aria-describedby={errors.name ? "name-error" : undefined}
           aria-invalid={!!errors.name}
@@ -127,12 +128,12 @@ export function Step1Form({ defaultValues, isPending, onSubmit }: Props) {
         }
         required
       >
-        <div role="radiogroup" aria-labelledby="gender-label" className="flex gap-2">
+        <div role="radiogroup" aria-label={t("gender_label")} className="flex gap-2">
           {(["male", "female"] as const).map((g) => (
             <label
               key={g}
               className={cn(
-                "flex-1 text-center px-4 py-3 rounded-xl border cursor-pointer text-sm font-medium transition-colors",
+                "flex-1 text-center px-4 py-3 rounded-xl border cursor-pointer text-sm font-medium transition-colors focus-within:ring-2 focus-within:ring-slate-900 focus-within:ring-offset-2",
                 selectedGender === g
                   ? "bg-slate-900 text-white border-slate-900"
                   : "border-slate-200 text-slate-600 hover:border-slate-400"
@@ -187,7 +188,7 @@ export function Step1Form({ defaultValues, isPending, onSubmit }: Props) {
         <input
           id="nationality"
           type="text"
-          placeholder="Saudi Arabian"
+          placeholder={t("nationality_placeholder")}
           disabled={isPending}
           aria-invalid={!!errors.nationality}
           {...register("nationality")}
@@ -210,7 +211,7 @@ export function Step1Form({ defaultValues, isPending, onSubmit }: Props) {
           <input
             id="country"
             type="text"
-            placeholder="Saudi Arabia"
+            placeholder={t("country_placeholder")}
             disabled={isPending}
             aria-invalid={!!errors.country}
             {...register("country")}
@@ -231,7 +232,7 @@ export function Step1Form({ defaultValues, isPending, onSubmit }: Props) {
           <input
             id="city"
             type="text"
-            placeholder="Riyadh"
+            placeholder={t("city_placeholder")}
             disabled={isPending}
             aria-invalid={!!errors.city}
             {...register("city")}
@@ -245,7 +246,7 @@ export function Step1Form({ defaultValues, isPending, onSubmit }: Props) {
         type="submit"
         disabled={isPending}
         className={cn(
-          "w-full py-3 mt-4 rounded-xl bg-slate-900 text-white font-medium hover:bg-slate-800 transition-colors",
+          "w-full py-3 mt-4 rounded-xl bg-slate-900 text-white font-medium hover:bg-slate-800 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2",
           "disabled:opacity-50 disabled:cursor-not-allowed"
         )}
       >

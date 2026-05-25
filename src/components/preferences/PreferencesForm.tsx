@@ -42,7 +42,7 @@ function Field({
 function inputCls(hasError?: boolean) {
   return cn(
     "w-full px-4 py-3 rounded-xl border border-slate-200 bg-transparent text-slate-900",
-    "placeholder:text-slate-400 focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition-all",
+    "placeholder:text-slate-400 focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 focus-visible:ring-2 focus-visible:ring-offset-2 transition-all",
     "disabled:opacity-50 disabled:cursor-not-allowed",
     hasError && "border-red-400 focus:border-red-500 focus:ring-red-400"
   );
@@ -140,7 +140,7 @@ export default function PreferencesForm({ defaultValues }: Props) {
               inputMode="numeric"
               min={18}
               max={100}
-              placeholder="25"
+              placeholder={t("min_age_placeholder")}
               disabled={isPending}
               aria-invalid={!!errors.min_age}
               aria-describedby={errors.min_age ? "min_age-error" : undefined}
@@ -164,7 +164,7 @@ export default function PreferencesForm({ defaultValues }: Props) {
               inputMode="numeric"
               min={18}
               max={100}
-              placeholder="35"
+              placeholder={t("max_age_placeholder")}
               disabled={isPending}
               aria-invalid={!!errors.max_age}
               aria-describedby={errors.max_age ? "max_age-error" : undefined}
@@ -191,7 +191,7 @@ export default function PreferencesForm({ defaultValues }: Props) {
                 value={status}
                 disabled={isPending}
                 {...register("accepted_marital_statuses")}
-                className="h-4 w-4 rounded border-slate-300 accent-slate-900"
+                className="h-4 w-4 rounded border-slate-300 accent-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2"
               />
               {tEnums(
                 `marital_status.${status}` as Parameters<typeof tEnums>[0]
@@ -217,7 +217,7 @@ export default function PreferencesForm({ defaultValues }: Props) {
                 value={level}
                 disabled={isPending}
                 {...register("accepted_education_levels")}
-                className="h-4 w-4 rounded border-slate-300 accent-slate-900"
+                className="h-4 w-4 rounded border-slate-300 accent-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2"
               />
               {tEnums(`education.${level}` as Parameters<typeof tEnums>[0])}
             </label>
@@ -257,7 +257,7 @@ export default function PreferencesForm({ defaultValues }: Props) {
           type="submit"
           disabled={isPending}
           className={cn(
-            "w-full py-3 rounded-xl bg-slate-900 text-white font-medium hover:bg-slate-800 transition-colors",
+            "w-full py-3 rounded-xl bg-slate-900 text-white font-medium hover:bg-slate-800 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2",
             "disabled:opacity-50 disabled:cursor-not-allowed"
           )}
         >

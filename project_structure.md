@@ -9,6 +9,9 @@ sakan/
 ├── next.config.ts                                 # Next.js configuration – wraps withNextIntl plugin for i18n + SSR client component support
 ├── project_structure.md                           # This file – live map of the src/ architecture
 ├── tsconfig.json                                  # TypeScript configuration (strict mode, path aliases)
+├── .github/
+│   └── workflows/
+│       └── quality-gates.yml                      # CI workflow running lint, typecheck, tests, and build on push/PR
 │
 ├── messages/                                      # i18n string dictionaries (no hardcoded strings in UI)
 │   ├── en.json                                    # English – namespaces: common, nav, locale_switcher, auth, onboarding, dashboard, preferences, profile, chat, enums
@@ -104,7 +107,7 @@ sakan/
 │   │   │   └── queries/
 │   │   │       ├── profiles.ts                    # getProfileById(), getMatches() – profile read queries
 │   │   │       ├── preferences.ts                 # getPreferencesByProfileId() – partner preferences read query
-│   │       ├── chats.ts                       # getChatsByUserId(), getChatById(), getChatListForUser() – chat read queries; ChatWithPartner type
+│   │   │       ├── chats.ts                       # getChatsByUserId(), getChatById(), getChatListForUser() – chat read queries; ChatWithPartner type
 │   │   │       └── messages.ts                    # getMessagesByChatId() – message read query
 │   │   ├── validation/
 │   │   │   ├── auth.ts                            # emailSchema + otpSchema – Zod validation for OTP auth form steps
@@ -126,6 +129,7 @@ sakan/
 │   ├── locale-switcher.test.tsx               # Tests for LocaleSwitcher (renders locales, aria-current, accessible nav)
 │   ├── chat.test.tsx                          # Tests for ChatThread (renders messages, send/fail states, whitespace guard)
 │   ├── match-feed.test.tsx                    # Tests for MatchCard (name/age/city/edu/link) and MatchEmptyState (empty state text)
+│   ├── nav-bar.test.tsx                       # Tests for NavBar landmark label, active-link aria-current, and sign-out action
 │   ├── otp-form.test.tsx                      # Tests for OtpForm (email step, OTP step, error states, resend flow)
 │   └── onboarding-wizard.test.tsx             # Tests for OnboardingWizard (step rendering, navigation, server error display)
     └── unit/
@@ -163,9 +167,5 @@ sakan/
 | 6 | ✅ Complete | Multi-step onboarding wizard |
 | 7 | ✅ Complete | Match dashboard and filtering |
 | 8 | ✅ Complete | Real-time chat |
-| 9 | Planned | Premium UI/UX polish and accessibility hardening |
-| 10 | Planned | Quality gates, CI, and release readiness |
-| 7 | ✅ Complete | Match dashboard and filtering |
-| 8 | Planned | Real-time chat |
-| 9 | Planned | Premium UI/UX polish and accessibility hardening |
-| 10 | Planned | Quality gates, CI, and release readiness |
+| 9 | ✅ Complete | Premium UI/UX polish and accessibility hardening |
+| 10 | ✅ Complete | Quality gates, CI, and release readiness |

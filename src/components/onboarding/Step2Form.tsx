@@ -39,7 +39,7 @@ function Field({
 function inputCls(hasError?: boolean) {
   return cn(
     "w-full px-4 py-3 rounded-xl border border-slate-200 bg-transparent text-slate-900",
-    "placeholder:text-slate-400 focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition-all",
+    "placeholder:text-slate-400 focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 focus-visible:ring-2 focus-visible:ring-offset-2 transition-all",
     "disabled:opacity-50 disabled:cursor-not-allowed",
     hasError && "border-red-400 focus:border-red-500 focus:ring-red-400"
   );
@@ -101,7 +101,7 @@ export function Step2Form({ defaultValues, isPending, onSubmit, onBack }: Props)
             step="0.1"
             min={100}
             max={250}
-            placeholder="175"
+            placeholder={t("height_placeholder")}
             disabled={isPending}
             aria-invalid={!!errors.height_cm}
             {...register("height_cm", { valueAsNumber: true })}
@@ -125,7 +125,7 @@ export function Step2Form({ defaultValues, isPending, onSubmit, onBack }: Props)
             step="0.1"
             min={30}
             max={300}
-            placeholder="70"
+            placeholder={t("weight_placeholder")}
             disabled={isPending}
             aria-invalid={!!errors.weight_kg}
             {...register("weight_kg", { valueAsNumber: true })}
@@ -164,7 +164,7 @@ export function Step2Form({ defaultValues, isPending, onSubmit, onBack }: Props)
         <input
           id="health_status"
           type="text"
-          placeholder="Good"
+          placeholder={t("health_placeholder")}
           disabled={isPending}
           {...register("health_status")}
           className={inputCls()}
@@ -176,7 +176,7 @@ export function Step2Form({ defaultValues, isPending, onSubmit, onBack }: Props)
         <input
           id="smoking_status"
           type="text"
-          placeholder="Non-smoker"
+          placeholder={t("smoking_placeholder")}
           disabled={isPending}
           {...register("smoking_status")}
           className={inputCls()}
@@ -190,7 +190,7 @@ export function Step2Form({ defaultValues, isPending, onSubmit, onBack }: Props)
           onClick={onBack}
           disabled={isPending}
           className={cn(
-            "flex-1 py-3 rounded-xl border border-slate-200 text-slate-600 font-medium hover:bg-slate-50",
+            "flex-1 py-3 rounded-xl border border-slate-200 text-slate-600 font-medium hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2",
             "transition-colors",
             "disabled:opacity-50 disabled:cursor-not-allowed"
           )}
@@ -201,7 +201,7 @@ export function Step2Form({ defaultValues, isPending, onSubmit, onBack }: Props)
           type="submit"
           disabled={isPending}
           className={cn(
-            "flex-1 py-3 rounded-xl bg-slate-900 text-white font-medium hover:bg-slate-800 transition-colors",
+            "flex-1 py-3 rounded-xl bg-slate-900 text-white font-medium hover:bg-slate-800 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2",
             "disabled:opacity-50 disabled:cursor-not-allowed"
           )}
         >
