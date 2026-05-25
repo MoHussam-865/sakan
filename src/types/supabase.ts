@@ -126,23 +126,29 @@ export type Database = {
         Row: Profile;
         Insert: ProfileInsert;
         Update: ProfileUpdate;
+        Relationships: [];
       };
       partner_preferences: {
         Row: PartnerPreference;
         Insert: PartnerPreferenceInsert;
         Update: PartnerPreferenceUpdate;
+        Relationships: [];
       };
       chats: {
         Row: Chat;
         Insert: ChatInsert;
         Update: Record<string, never>;
+        Relationships: [];
       };
       messages: {
         Row: Message;
         Insert: MessageInsert;
         Update: Partial<Pick<Message, "is_read">>;
+        Relationships: [];
       };
     };
+    Views: Record<string, never>;
+    Functions: Record<string, never>;
     Enums: {
       gender_type: GenderType;
       marital_status_type: MaritalStatusType;
@@ -151,5 +157,6 @@ export type Database = {
       religious_commitment_type: ReligiousCommitmentType;
       hijab_status_type: HijabStatusType;
     };
+    CompositeTypes: Record<string, never>;
   };
 };

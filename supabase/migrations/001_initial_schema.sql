@@ -94,12 +94,35 @@ ALTER TABLE partner_preferences ENABLE ROW LEVEL SECURITY;
 ALTER TABLE chats ENABLE ROW LEVEL SECURITY;
 ALTER TABLE messages ENABLE ROW LEVEL SECURITY;
 
--- Profile visibility: only active (non-deleted) profiles of the opposite gender.
+-- Helper: reads the current user's gender with SECURITY DEFINER so the
+-- lookup bypasses RLS and avoids infinite recursion in the SELECT policy below.
+CREATE OR REPLACE FUNCTION get_my_gender()
+RETURNS gender_type
+LANGUAGE sql
+SECURITY DEFINER
+STABLE
+SET search_path = public
+AS $$
+  SELECT gender FROM profiles WHERE id = auth.uid();
+$$;
+
+-- Profile visibility policies.
+-- Policy 1: users can always read their own profile row (required for
+--   upsert – PostgreSQL's INSERT ON CONFLICT DO UPDATE implicitly SELECTs
+--   the conflicting row; without this policy the read returns nothing,
+--   auth.uid() can't be resolved, and the INSERT WITH CHECK fails).
+CREATE POLICY "Users can view own profile"
+ON profiles FOR SELECT
+USING (auth.uid() = id);
+
+-- Policy 2: active profiles of the opposite gender (the match feed).
+--   Uses get_my_gender() instead of an inline sub-SELECT to prevent the
+--   policy from recursively triggering itself (PostgreSQL error 42P17).
 CREATE POLICY "Users can view opposite gender active profiles"
 ON profiles FOR SELECT
 USING (
     deleted_at IS NULL
-    AND gender != (SELECT gender FROM profiles WHERE id = auth.uid())
+    AND gender != get_my_gender()
 );
 
 -- Profile write policies: users manage only their own row.

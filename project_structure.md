@@ -59,9 +59,13 @@ sakan/
 │   │       │
 │   │       └── (protected)/                       # Route group – authenticated routes, nav bar
 │   │           ├── layout.tsx                     # Protected layout – server-side auth guard; redirects unauthenticated users to /login
-│   │           └── dashboard/
-│   │               ├── page.tsx                   # Dashboard scaffold – uses "dashboard" namespace, match feed in Phase 7
-│   │               └── loading.tsx                # Dashboard loading skeleton
+│   │           ├── dashboard/
+│   │           │   ├── page.tsx                   # Match feed dashboard – fetches user profile + preferences, calls getMatches(), renders MatchCard grid or MatchEmptyState
+│   │           │   └── loading.tsx                # Dashboard loading skeleton – centred spinner
+│   │           └── profile/
+│   │               └── [id]/
+│   │                   ├── page.tsx               # Profile detail page – fetches profile by id, renders detail fields; notFound() on miss/soft-deleted
+│   │                   └── loading.tsx            # Profile detail loading skeleton – pulse placeholder mimicking layout
 │   │
 │   ├── components/                                # Reusable UI components, grouped by domain
 │   │   ├── auth/
@@ -100,7 +104,7 @@ sakan/
 │   │       └── matches.ts                         # calculateAge(), dobRangeFromAgeRange() – date/age helpers for the match query pipeline
 │   │
 │   └── types/
-│       └── supabase.ts                            # Hand-authored Database type, all Row/Insert/Update types and enums
+│       └── supabase.ts                            # Hand-authored Database type – Row/Insert/Update/Relationships per table, Views/Functions/Enums; satisfies GenericSchema for supabase-js v2
 │
 └── tests/
     ├── setup.ts                                   # Jest global setup – imports @testing-library/jest-dom
