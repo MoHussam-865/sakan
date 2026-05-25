@@ -46,6 +46,7 @@ export default function NavBar() {
         {/* Nav links + sign out */}
         <div className="flex items-center gap-6">
           {navLink("/dashboard", tNav("dashboard"))}
+          {navLink("/chat", tNav("chat"))}
           {navLink("/preferences", tNav("preferences"))}
 
           <form action={signOut}>

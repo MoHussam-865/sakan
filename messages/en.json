@@ -132,9 +132,12 @@
   "chat": {
     "title": "Messages",
     "no_chats": "No conversations yet",
-    "message_placeholder": "Write a message\u2026",
+    "no_chats_hint": "Start a conversation from a match’s profile page",
+    "message_placeholder": "Write a message…",
     "send": "Send",
-    "you": "You"
+    "you": "You",
+    "send_failed": "Failed to send. Please try again.",
+    "start_failed": "Failed to start conversation. Please try again."
   },
   "enums": {
     "gender": {

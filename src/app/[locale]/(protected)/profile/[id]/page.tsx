@@ -4,6 +4,7 @@ import { Link } from "@/i18n/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getProfileById } from "@/lib/supabase/queries/profiles";
 import { calculateAge } from "@/lib/utils/matches";
+import { startChat } from "@/actions/chat";
 import type { Profile } from "@/types/supabase";
 
 interface ProfileDetailPageProps {
@@ -109,15 +110,16 @@ export default async function ProfileDetailPage({
         )}
       </dl>
 
-      {/* Chat CTA – wired in Phase 8 */}
+      {/* Chat CTA */}
       <div className="mt-10 pt-8 border-t border-slate-200">
-        <button
-          disabled
-          className="w-full py-3 px-6 rounded-xl bg-slate-900 text-white font-medium text-sm opacity-40 cursor-not-allowed"
-          aria-label={t("dashboard.start_chat")}
-        >
-          {t("dashboard.start_chat")}
-        </button>
+        <form action={startChat.bind(null, profile.id)}>
+          <button
+            type="submit"
+            className="w-full py-3 px-6 rounded-xl bg-slate-900 text-white font-medium text-sm hover:bg-slate-800 transition-colors"
+          >
+            {t("dashboard.start_chat")}
+          </button>
+        </form>
       </div>
     </section>
   );

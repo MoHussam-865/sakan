@@ -33,7 +33,8 @@ sakan/
 │   │   │   └── index.ts                           # finalizeOnboarding() – validates full payload, upserts profile + preferences, redirects to dashboard
 │   │   ├── preferences/
 │   │   │   └── index.ts                           # updatePreferences() – validates and upserts partner_preferences for the authenticated user
-│   │   └── chat/                                  # Chat Server Actions (create chat, send message) – Phase 8
+│   │   └── chat/
+│   │       └── index.ts                           # startChat() – finds/creates chat and redirects; sendMessage() – validates and inserts a message
 │   │
 │   ├── app/
 │   │   ├── globals.css                            # Global Tailwind base styles and design tokens
@@ -61,12 +62,18 @@ sakan/
 │   │       │
 │   │       └── (protected)/                       # Route group – authenticated routes, nav bar
 │   │           ├── layout.tsx                     # Protected layout – server-side auth guard; redirects unauthenticated users to /login
+│   │           ├── chat/
+│   │           │   ├── page.tsx                   # Chat list page – Server Component; shows all conversations with partner name; empty state with hint
+│   │           │   ├── loading.tsx                # Chat list loading skeleton – avatar + name row pulses
+│   │           │   └── [chatId]/
+│   │           │       ├── page.tsx               # Chat thread page – Server Component; fetches initial messages + partner profile; renders ChatThread
+│   │           │       └── loading.tsx            # Chat thread loading skeleton – header + message bubbles + input pulses
 │   │           ├── dashboard/
 │   │           │   ├── page.tsx                   # Match feed dashboard – fetches user profile + preferences, calls getMatches(), renders MatchCard grid or MatchEmptyState
 │   │           │   └── loading.tsx                # Dashboard loading skeleton – centred spinner
 │   │           └── profile/
 │   │               └── [id]/
-│   │                   ├── page.tsx               # Profile detail page – fetches profile by id, renders detail fields; notFound() on miss/soft-deleted
+│   │                   ├── page.tsx               # Profile detail page – fetches profile by id, renders detail fields, Start Chat form action; notFound() on miss/soft-deleted
 │   │                   └── loading.tsx            # Profile detail loading skeleton – pulse placeholder mimicking layout
 │   │
 │   ├── components/                                # Reusable UI components, grouped by domain
@@ -75,6 +82,8 @@ sakan/
 │   │   ├── matches/
 │   │   │   ├── MatchCard.tsx                      # Client Component – profile summary card; links to detail view, shows age, city, education
 │   │   │   └── MatchEmptyState.tsx                # Client Component – empty state with a Link button to /preferences when no matches are found
+│   │   ├── chat/
+│   │   │   └── ChatThread.tsx                     # Client Component – scrollable message list + send input + Supabase Realtime subscription for live updates
 │   │   ├── onboarding/
 │   │   │   ├── OnboardingWizard.tsx               # Client Component – manages current step state, calls Server Actions via useTransition
 │   │   │   ├── StepProgressBar.tsx                # Step progress indicator – dots + connectors; aria-current on active step
@@ -95,10 +104,11 @@ sakan/
 │   │   │   └── queries/
 │   │   │       ├── profiles.ts                    # getProfileById(), getMatches() – profile read queries
 │   │   │       ├── preferences.ts                 # getPreferencesByProfileId() – partner preferences read query
-│   │   │       ├── chats.ts                       # getChatsByUserId(), getChatById() – chat read queries
+│   │       ├── chats.ts                       # getChatsByUserId(), getChatById(), getChatListForUser() – chat read queries; ChatWithPartner type
 │   │   │       └── messages.ts                    # getMessagesByChatId() – message read query
 │   │   ├── validation/
 │   │   │   ├── auth.ts                            # emailSchema + otpSchema – Zod validation for OTP auth form steps
+│   │   │   ├── chat.ts                            # sendMessageSchema – Zod validation for message content (trim, min 1, max 1000)
 │   │   │   └── onboarding.ts                      # step1-4 Zod schemas for onboarding wizard validation
 │   │   └── utils/
 │   │       ├── cn.ts                              # cn() helper – merges Tailwind classes via clsx + tailwind-merge
@@ -114,11 +124,13 @@ sakan/
 │   ├── error-boundary.test.tsx                # Tests for <locale>/error.tsx (renders, retry button, console.error)
 │   ├── locale-layout.test.tsx                 # Tests for <locale>/layout.tsx (lang/dir attributes, notFound guard)
 │   ├── locale-switcher.test.tsx               # Tests for LocaleSwitcher (renders locales, aria-current, accessible nav)
+│   ├── chat.test.tsx                          # Tests for ChatThread (renders messages, send/fail states, whitespace guard)
 │   ├── match-feed.test.tsx                    # Tests for MatchCard (name/age/city/edu/link) and MatchEmptyState (empty state text)
 │   ├── otp-form.test.tsx                      # Tests for OtpForm (email step, OTP step, error states, resend flow)
 │   └── onboarding-wizard.test.tsx             # Tests for OnboardingWizard (step rendering, navigation, server error display)
     └── unit/
         ├── actions/
+        │   ├── chat.test.ts                   # Tests for startChat() and sendMessage() (auth guard, participant check, redirect, error paths)
         │   └── onboarding.test.ts             # Tests for saveOnboardingStep1-4 (auth guard, validation, Supabase mocks, redirect)
         └── lib/
             ├── i18n/
@@ -149,6 +161,10 @@ sakan/
 | 4 | ✅ Complete | Supabase integration and typed data contracts |
 | 5 | ✅ Complete | Authentication (OTP flow) |
 | 6 | ✅ Complete | Multi-step onboarding wizard |
+| 7 | ✅ Complete | Match dashboard and filtering |
+| 8 | ✅ Complete | Real-time chat |
+| 9 | Planned | Premium UI/UX polish and accessibility hardening |
+| 10 | Planned | Quality gates, CI, and release readiness |
 | 7 | ✅ Complete | Match dashboard and filtering |
 | 8 | Planned | Real-time chat |
 | 9 | Planned | Premium UI/UX polish and accessibility hardening |
