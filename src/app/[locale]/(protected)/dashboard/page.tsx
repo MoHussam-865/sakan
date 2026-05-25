@@ -34,12 +34,12 @@ export default async function DashboardPage() {
     : [];
 
   return (
-    <section className="w-full max-w-4xl mx-auto px-4 py-8">
-      <div className="mb-8">
-        <h1 className="text-2xl font-semibold tracking-tight text-stone-800 mb-1">
+    <section className="w-full max-w-4xl mx-auto px-4 py-10">
+      <div className="pb-6 mb-8 border-b border-slate-200">
+        <h1 className="text-2xl font-semibold tracking-tight text-slate-900 mb-1">
           {t("title")}
         </h1>
-        <p className="text-sm text-stone-500">{t("subtitle")}</p>
+        <p className="text-sm text-slate-500">{t("subtitle")}</p>
       </div>
 
       {matches.length === 0 ? (

@@ -22,13 +22,13 @@ export default function MatchCard({ profile }: MatchCardProps) {
     <Link
       href={`/profile/${profile.id}`}
       className={cn(
-        "group flex flex-col p-5 rounded-2xl border border-slate-100 bg-white",
-        "hover:border-slate-200 hover:shadow-sm transition-all duration-200"
+        "group flex flex-col p-5 rounded-2xl border border-slate-200 bg-white",
+        "hover:border-slate-300 hover:bg-slate-50 transition-all duration-150"
       )}
     >
       {/* Avatar placeholder */}
       <div
-        className="w-11 h-11 rounded-full bg-stone-100 mb-4 shrink-0"
+        className="w-10 h-10 rounded-full bg-stone-200 mb-4 shrink-0"
         aria-hidden="true"
       />
 
@@ -41,7 +41,7 @@ export default function MatchCard({ profile }: MatchCardProps) {
       </p>
 
       {/* Location and education tags */}
-      <div className="mt-3 flex flex-wrap gap-x-3 gap-y-1 text-xs text-slate-400">
+      <div className="mt-3 flex flex-wrap gap-x-3 gap-y-1 text-xs text-slate-500">
         {profile.city && <span>{profile.city}</span>}
         {profile.education_level && (
           <span>{t(`enums.education.${profile.education_level}`)}</span>
@@ -49,7 +49,7 @@ export default function MatchCard({ profile }: MatchCardProps) {
       </div>
 
       {/* CTA hint */}
-      <span className="mt-5 text-xs font-medium text-slate-500 group-hover:text-slate-900 transition-colors">
+      <span className="mt-5 text-xs font-medium text-slate-400 group-hover:text-slate-700 transition-colors">
         {t("dashboard.view_profile")} →
       </span>
     </Link>

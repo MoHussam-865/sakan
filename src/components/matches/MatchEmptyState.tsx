@@ -11,19 +11,19 @@ export default function MatchEmptyState() {
   const t = useTranslations("dashboard");
 
   return (
-    <div className="flex flex-col items-center justify-center py-20 text-center">
-      {/* Decorative icon placeholder */}
+    <div className="flex flex-col items-center justify-center py-24 text-center">
+      {/* Editorial hairline ring icon */}
       <div
-        className="w-14 h-14 rounded-full bg-stone-100 mb-5"
+        className="w-14 h-14 rounded-full border-2 border-slate-200 mb-6"
         aria-hidden="true"
       />
-      <p className="text-base font-medium text-slate-700">{t("no_matches")}</p>
-      <p className="text-sm text-slate-400 mt-1 max-w-xs">
+      <p className="text-base font-medium text-slate-800">{t("no_matches")}</p>
+      <p className="text-sm text-slate-500 mt-2 max-w-xs leading-relaxed">
         {t("no_matches_hint")}
       </p>
       <Link
         href="/preferences"
-        className="mt-6 px-5 py-2.5 rounded-xl bg-slate-900 text-white text-sm font-medium hover:bg-slate-800 transition-colors"
+        className="mt-8 px-6 py-2.5 rounded-xl bg-slate-900 text-white text-sm font-medium hover:bg-slate-800 transition-colors"
       >
         {t("update_preferences")}
       </Link>

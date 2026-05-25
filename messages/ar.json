@@ -18,6 +18,7 @@
   },
   "nav": {
     "dashboard": "التطابقات",
+    "preferences": "التفضيلات",
     "profile": "ملفي الشخصي",
     "chat": "الرسائل",
     "sign_out": "تسجيل الخروج"
@@ -78,6 +79,7 @@
     "partner_description_placeholder": "صف شريكك المثالي…",
     "min_age_label": "الحد الأدنى للعمر",
     "max_age_label": "الحد الأقصى للعمر",
+    "age_range_label": "نطاق العمر",
     "accepted_marital_statuses_label": "الحالات الاجتماعية المقبولة",
     "accepted_education_levels_label": "مستويات التعليم المقبولة",
     "name_required": "الاسم الكامل مطلوب",

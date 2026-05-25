@@ -12,12 +12,26 @@ import { cn } from "@/lib/utils/cn";
 export default function NavBar() {
   const tNav = useTranslations("nav");
   const tCommon = useTranslations("common");
-  const tPref = useTranslations("preferences");
   const pathname = usePathname();
+
+  const navLink = (href: string, label: string) => (
+    <Link
+      href={href}
+      aria-current={pathname === href ? "page" : undefined}
+      className={cn(
+        "text-sm transition-colors",
+        pathname === href
+          ? "text-slate-900 font-medium"
+          : "text-slate-500 hover:text-slate-900"
+      )}
+    >
+      {label}
+    </Link>
+  );
 
   return (
     <nav
-      className="sticky top-0 z-10 bg-white/90 backdrop-blur-sm border-b border-slate-100"
+      className="sticky top-0 z-10 bg-stone-50/90 backdrop-blur-sm border-b border-slate-200"
       aria-label="Main navigation"
     >
       <div className="max-w-4xl mx-auto px-4 h-14 flex items-center justify-between">
@@ -31,31 +45,8 @@ export default function NavBar() {
 
         {/* Nav links + sign out */}
         <div className="flex items-center gap-6">
-          <Link
-            href="/dashboard"
-            aria-current={pathname === "/dashboard" ? "page" : undefined}
-            className={cn(
-              "text-sm transition-colors",
-              pathname === "/dashboard"
-                ? "text-slate-900 font-medium"
-                : "text-slate-500 hover:text-slate-900"
-            )}
-          >
-            {tNav("dashboard")}
-          </Link>
-
-          <Link
-            href="/preferences"
-            aria-current={pathname === "/preferences" ? "page" : undefined}
-            className={cn(
-              "text-sm transition-colors",
-              pathname === "/preferences"
-                ? "text-slate-900 font-medium"
-                : "text-slate-500 hover:text-slate-900"
-            )}
-          >
-            {tPref("title")}
-          </Link>
+          {navLink("/dashboard", tNav("dashboard"))}
+          {navLink("/preferences", tNav("preferences"))}
 
           <form action={signOut}>
             <button

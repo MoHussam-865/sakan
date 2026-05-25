@@ -117,76 +117,81 @@ export default function PreferencesForm({ defaultValues }: Props) {
     <form
       onSubmit={handleSubmit(onSubmit)}
       noValidate
-      className="flex flex-col gap-6 w-full"
+      className="flex flex-col divide-y divide-slate-100 w-full"
     >
       {/* Age range */}
-      <div className="grid grid-cols-2 gap-4">
-        <Field
-          id="min_age"
-          label={t("min_age_label")}
-          error={
-            errors.min_age?.message
-              ? t(errors.min_age.message as Parameters<typeof t>[0])
-              : undefined
-          }
-        >
-          <input
+      <div className="py-6 first:pt-0">
+        <p className="text-sm font-medium text-slate-800 mb-4">
+          {t("age_range_label")}
+        </p>
+        <div className="grid grid-cols-2 gap-4">
+          <Field
             id="min_age"
-            type="number"
-            inputMode="numeric"
-            min={18}
-            max={100}
-            placeholder="25"
-            disabled={isPending}
-            aria-invalid={!!errors.min_age}
-            aria-describedby={errors.min_age ? "min_age-error" : undefined}
-            {...register("min_age", { valueAsNumber: true })}
-            className={inputCls(!!errors.min_age)}
-          />
-        </Field>
+            label={t("min_age_label")}
+            error={
+              errors.min_age?.message
+                ? t(errors.min_age.message as Parameters<typeof t>[0])
+                : undefined
+            }
+          >
+            <input
+              id="min_age"
+              type="number"
+              inputMode="numeric"
+              min={18}
+              max={100}
+              placeholder="25"
+              disabled={isPending}
+              aria-invalid={!!errors.min_age}
+              aria-describedby={errors.min_age ? "min_age-error" : undefined}
+              {...register("min_age", { valueAsNumber: true })}
+              className={inputCls(!!errors.min_age)}
+            />
+          </Field>
 
-        <Field
-          id="max_age"
-          label={t("max_age_label")}
-          error={
-            errors.max_age?.message
-              ? t(errors.max_age.message as Parameters<typeof t>[0])
-              : undefined
-          }
-        >
-          <input
+          <Field
             id="max_age"
-            type="number"
-            inputMode="numeric"
-            min={18}
-            max={100}
-            placeholder="35"
-            disabled={isPending}
-            aria-invalid={!!errors.max_age}
-            aria-describedby={errors.max_age ? "max_age-error" : undefined}
-            {...register("max_age", { valueAsNumber: true })}
-            className={inputCls(!!errors.max_age)}
-          />
-        </Field>
+            label={t("max_age_label")}
+            error={
+              errors.max_age?.message
+                ? t(errors.max_age.message as Parameters<typeof t>[0])
+                : undefined
+            }
+          >
+            <input
+              id="max_age"
+              type="number"
+              inputMode="numeric"
+              min={18}
+              max={100}
+              placeholder="35"
+              disabled={isPending}
+              aria-invalid={!!errors.max_age}
+              aria-describedby={errors.max_age ? "max_age-error" : undefined}
+              {...register("max_age", { valueAsNumber: true })}
+              className={inputCls(!!errors.max_age)}
+            />
+          </Field>
+        </div>
       </div>
 
       {/* Accepted marital statuses */}
-      <fieldset>
-        <legend className="text-sm text-slate-500 mb-3">
+      <fieldset className="py-6">
+        <legend className="text-sm font-medium text-slate-800 mb-4">
           {t("accepted_marital_statuses_label")}
         </legend>
         <div className="flex flex-wrap gap-3">
           {maritalOptions.map((status) => (
             <label
               key={status}
-              className="flex items-center gap-2 text-sm text-stone-600 cursor-pointer"
+              className="flex items-center gap-2 text-sm text-slate-700 cursor-pointer"
             >
               <input
                 type="checkbox"
                 value={status}
                 disabled={isPending}
                 {...register("accepted_marital_statuses")}
-                className="h-4 w-4 rounded border-slate-200 accent-stone-900"
+                className="h-4 w-4 rounded border-slate-300 accent-slate-900"
               />
               {tEnums(
                 `marital_status.${status}` as Parameters<typeof tEnums>[0]
@@ -197,22 +202,22 @@ export default function PreferencesForm({ defaultValues }: Props) {
       </fieldset>
 
       {/* Accepted education levels */}
-      <fieldset>
-        <legend className="text-sm text-slate-500 mb-3">
+      <fieldset className="py-6">
+        <legend className="text-sm font-medium text-slate-800 mb-4">
           {t("accepted_education_levels_label")}
         </legend>
         <div className="flex flex-wrap gap-3">
           {educationOptions.map((level) => (
             <label
               key={level}
-              className="flex items-center gap-2 text-sm text-stone-600 cursor-pointer"
+              className="flex items-center gap-2 text-sm text-slate-700 cursor-pointer"
             >
               <input
                 type="checkbox"
                 value={level}
                 disabled={isPending}
                 {...register("accepted_education_levels")}
-                className="h-4 w-4 rounded border-slate-200 accent-stone-900"
+                className="h-4 w-4 rounded border-slate-300 accent-slate-900"
               />
               {tEnums(`education.${level}` as Parameters<typeof tEnums>[0])}
             </label>
@@ -221,40 +226,44 @@ export default function PreferencesForm({ defaultValues }: Props) {
       </fieldset>
 
       {/* Partner description */}
-      <Field id="partner_description" label={tPref("partner_description_label")}>
-        <textarea
-          id="partner_description"
-          rows={4}
-          placeholder={tPref("partner_description_placeholder")}
-          disabled={isPending}
-          {...register("partner_description")}
-          className={cn(inputCls(), "resize-none")}
-        />
-      </Field>
+      <div className="py-6">
+        <Field id="partner_description" label={tPref("partner_description_label")}>
+          <textarea
+            id="partner_description"
+            rows={4}
+            placeholder={tPref("partner_description_placeholder")}
+            disabled={isPending}
+            {...register("partner_description")}
+            className={cn(inputCls(), "resize-none")}
+          />
+        </Field>
+      </div>
 
       {/* Server error / success feedback */}
       {serverError && (
-        <p role="alert" className="text-sm text-red-600">
+        <p role="alert" className="text-sm text-red-600 pt-4">
           {serverError}
         </p>
       )}
       {saved && (
-        <p role="status" className="text-sm text-emerald-600 font-medium">
+        <p role="status" className="text-sm text-emerald-700 font-medium pt-4">
           {tPref("saved")}
         </p>
       )}
 
       {/* Submit */}
-      <button
-        type="submit"
-        disabled={isPending}
-        className={cn(
-          "w-full py-3 rounded-xl bg-slate-900 text-white font-medium hover:bg-slate-800 transition-colors",
-          "disabled:opacity-50 disabled:cursor-not-allowed"
-        )}
-      >
-        {isPending ? tCommon("loading") : tPref("save")}
-      </button>
+      <div className="pt-6">
+        <button
+          type="submit"
+          disabled={isPending}
+          className={cn(
+            "w-full py-3 rounded-xl bg-slate-900 text-white font-medium hover:bg-slate-800 transition-colors",
+            "disabled:opacity-50 disabled:cursor-not-allowed"
+          )}
+        >
+          {isPending ? tCommon("loading") : tPref("save")}
+        </button>
+      </div>
     </form>
   );
 }

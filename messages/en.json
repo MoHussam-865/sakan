@@ -18,6 +18,7 @@
   },
   "nav": {
     "dashboard": "Matches",
+    "preferences": "Preferences",
     "profile": "My Profile",
     "chat": "Messages",
     "sign_out": "Sign out"
@@ -78,6 +79,7 @@
     "partner_description_placeholder": "Describe your ideal partner\u2026",
     "min_age_label": "Minimum age",
     "max_age_label": "Maximum age",
+    "age_range_label": "Age range",
     "accepted_marital_statuses_label": "Accepted marital statuses",
     "accepted_education_levels_label": "Accepted education levels",
     "name_required": "Full name is required",

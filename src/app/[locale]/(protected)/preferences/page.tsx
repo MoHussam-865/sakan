@@ -20,22 +20,22 @@ export default async function PreferencesPage() {
   );
 
   return (
-    <section className="w-full max-w-lg mx-auto px-4 py-8">
+    <section className="w-full max-w-lg mx-auto px-4 py-10">
       {/* Back link */}
       <Link
         href="/dashboard"
-        className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-900 transition-colors mb-6"
+        className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-900 transition-colors mb-8"
       >
         <span aria-hidden="true">←</span>
         {t("back_to_matches")}
       </Link>
 
       {/* Heading */}
-      <div className="mb-8">
-        <h1 className="text-2xl font-semibold tracking-tight text-stone-800 mb-1">
+      <div className="pb-6 mb-8 border-b border-slate-200">
+        <h1 className="text-2xl font-semibold tracking-tight text-slate-900 mb-1">
           {t("title")}
         </h1>
-        <p className="text-sm text-stone-500">{t("subtitle")}</p>
+        <p className="text-sm text-slate-500">{t("subtitle")}</p>
       </div>
 
       <PreferencesForm

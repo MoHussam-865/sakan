@@ -28,6 +28,30 @@ Code is NEVER considered complete without tests. You MUST generate or update tes
 
 ## 5. ANTI-AI UI/UX & Premium Styling (CRITICAL)
 Avoid the generic, templated "AI-generated look". We are building a premium, editorial minimalist platform.
+
+> ⚠️ **AGENT NOTE (added after UI refactor on 2026-05-25):** A full audit was performed because an agent produced "AI-template" output. The specific violations found and the correct patterns to use instead are:
+>
+> **DO NOT:**
+> - Add `shadow-sm`/`shadow-md`/`shadow-lg` to cards — it looks like a SaaS template. Use `border border-slate-200` only.
+> - Use `text-slate-400` for *any* body text — it fails WCAG AA contrast on white. Minimum for secondary text is `text-slate-500`.
+> - Use `bg-stone-100` filled circles/blobs as icon placeholders — use a hairline `border-2 border-slate-200` ring instead.
+> - Mix `text-stone-*` and `text-slate-*` — pick one palette and stick to it. This codebase uses **slate** for all text.
+> - Set `background: #0a0a0a` or any pitch-black in dark-mode CSS overrides — this project deliberately disables dark mode.
+> - Wrap login/auth forms in a heavy `bg-white p-8 rounded-2xl border shadow-sm` card — let the `bg-stone-50` layout breathe.
+> - Use `font-family: Arial` in globals.css — use the Geist font via `--font-geist-sans`.
+> - Use `tPref("title")` (a page title) as a nav-bar label — nav labels must come from the `nav.*` i18n namespace.
+> - Use `gap-6` between form fieldsets — use `divide-y divide-slate-100` with `py-6` per section for an editorial feel.
+>
+> **DO:**
+> - Use `bg-stone-50` or `bg-[#FAFAFA]` as the page/body background; `bg-white` only for interactive cards.
+> - Use `text-slate-900` for all primary headings and `text-slate-500` for all secondary/label text.
+> - Separate page sections with `border-b border-slate-200 pb-6 mb-8` thin horizontal rules instead of margin alone.
+> - Use `divide-y divide-slate-100` on `<dl>` and form sections to create clean editorial rhythm.
+> - Make fieldset `<legend>` elements `text-sm font-medium text-slate-800` — never `text-slate-500` (contrast fail).
+> - Profile `<dt>` labels: `text-slate-500 w-40 shrink-0` — never `text-slate-400`.
+> - NavBar background should be `bg-stone-50/90 backdrop-blur-sm border-b border-slate-200` to blend with the warm page bg.
+> - Back-links: `text-slate-500 hover:text-slate-900` — never `text-slate-400`.
+
 * **Tailwind CSS:** Use Tailwind utility classes. For complex conditional classes, use `clsx` and `tailwind-merge` (the `cn()` utility pattern).
 * **Accessible Warmth Palette:** Rely on warm neutral palettes. 
   * Backgrounds: `bg-[#FAFAFA]` or `bg-stone-50` for pages.
