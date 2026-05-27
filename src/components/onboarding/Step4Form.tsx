@@ -24,12 +24,12 @@ function Field({
 }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label htmlFor={id} className="text-sm text-slate-500">
+      <label htmlFor={id} className="text-sm text-zinc-500">
         {label}
       </label>
       {children}
       {error && (
-        <p id={`${id}-error`} role="alert" className="text-xs text-red-600">
+        <p id={`${id}-error`} role="alert" className="text-xs text-zinc-500">
           {error}
         </p>
       )}
@@ -39,10 +39,10 @@ function Field({
 
 function inputCls(hasError?: boolean) {
   return cn(
-    "w-full px-4 py-3 rounded-xl border border-slate-200 bg-transparent text-slate-900",
-    "placeholder:text-slate-400 focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 focus-visible:ring-2 focus-visible:ring-offset-2 transition-all",
+    "w-full px-4 py-3 rounded-xl border border-zinc-200/60 bg-white text-zinc-900",
+    "placeholder:text-zinc-400 focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 focus-visible:ring-2 focus-visible:ring-offset-2 transition-all",
     "disabled:opacity-50 disabled:cursor-not-allowed",
-    hasError && "border-red-400 focus:border-red-500 focus:ring-red-400"
+    hasError && "border-emerald-600 focus:border-emerald-600 focus:ring-emerald-600"
   );
 }
 
@@ -156,21 +156,21 @@ export function Step4Form({ defaultValues, isPending, onSubmit, onBack }: Props)
 
       {/* Accepted marital statuses */}
       <fieldset>
-        <legend className="text-sm font-medium text-slate-800 mb-2">
+        <legend className="text-sm font-medium text-zinc-800 mb-2">
           {t("accepted_marital_statuses_label")}
         </legend>
         <div className="flex flex-wrap gap-2">
           {maritalOptions.map((status) => (
             <label
               key={status}
-              className="flex items-center gap-2 text-sm text-slate-700 cursor-pointer"
+              className="flex items-center gap-2 text-sm text-zinc-700 cursor-pointer"
             >
               <input
                 type="checkbox"
                 value={status}
                 disabled={isPending}
                 {...register("accepted_marital_statuses")}
-                className="h-4 w-4 rounded border-slate-200 accent-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2"
+                className="h-4 w-4 rounded border-zinc-200/60 accent-emerald-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2"
               />
               {tEnums(
                 `marital_status.${status}` as Parameters<typeof tEnums>[0]
@@ -182,21 +182,21 @@ export function Step4Form({ defaultValues, isPending, onSubmit, onBack }: Props)
 
       {/* Accepted education levels */}
       <fieldset>
-        <legend className="text-sm font-medium text-slate-800 mb-2">
+        <legend className="text-sm font-medium text-zinc-800 mb-2">
           {t("accepted_education_levels_label")}
         </legend>
         <div className="flex flex-wrap gap-2">
           {educationOptions.map((level) => (
             <label
               key={level}
-              className="flex items-center gap-2 text-sm text-slate-700 cursor-pointer"
+              className="flex items-center gap-2 text-sm text-zinc-700 cursor-pointer"
             >
               <input
                 type="checkbox"
                 value={level}
                 disabled={isPending}
                 {...register("accepted_education_levels")}
-                className="h-4 w-4 rounded border-slate-200 accent-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2"
+                className="h-4 w-4 rounded border-zinc-200/60 accent-emerald-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2"
               />
               {tEnums(`education.${level}` as Parameters<typeof tEnums>[0])}
             </label>
@@ -226,7 +226,7 @@ export function Step4Form({ defaultValues, isPending, onSubmit, onBack }: Props)
           onClick={onBack}
           disabled={isPending}
           className={cn(
-            "flex-1 py-3 rounded-xl border border-slate-200 text-slate-600 font-medium hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2",
+            "flex-1 py-3 rounded-xl border border-zinc-200/60 text-zinc-600 font-medium hover:bg-zinc-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2",
             "transition-colors",
             "disabled:opacity-50 disabled:cursor-not-allowed"
           )}
@@ -237,7 +237,7 @@ export function Step4Form({ defaultValues, isPending, onSubmit, onBack }: Props)
           type="submit"
           disabled={isPending}
           className={cn(
-            "flex-1 py-3 rounded-xl bg-slate-900 text-white font-medium hover:bg-slate-800 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2",
+            "flex-1 py-3 rounded-xl bg-emerald-600 text-white font-medium hover:bg-emerald-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2",
             "disabled:opacity-50 disabled:cursor-not-allowed"
           )}
         >

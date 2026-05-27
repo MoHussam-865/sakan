@@ -23,12 +23,12 @@ function Field({
 }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label htmlFor={id} className="text-sm text-slate-500">
+      <label htmlFor={id} className="text-sm text-zinc-500">
         {label}
       </label>
       {children}
       {error && (
-        <p id={`${id}-error`} role="alert" className="text-xs text-red-600">
+        <p id={`${id}-error`} role="alert" className="text-xs text-zinc-500">
           {error}
         </p>
       )}
@@ -38,10 +38,10 @@ function Field({
 
 function inputCls(hasError?: boolean) {
   return cn(
-    "w-full px-4 py-3 rounded-xl border border-slate-200 bg-transparent text-slate-900",
-    "placeholder:text-slate-400 focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 focus-visible:ring-2 focus-visible:ring-offset-2 transition-all",
+    "w-full px-4 py-3 rounded-xl border border-zinc-200/50 bg-white bg-gradient-to-br from-white to-zinc-50/50 text-zinc-900",
+    "placeholder:text-zinc-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 focus-visible:ring-2 focus-visible:ring-offset-2 transition-all",
     "disabled:opacity-50 disabled:cursor-not-allowed",
-    hasError && "border-red-400 focus:border-red-500 focus:ring-red-400"
+    hasError && "border-indigo-500/50 hover:border-indigo-500 hover:shadow-md hover:shadow-indigo-500/10 focus:border-indigo-500 focus:ring-indigo-500"
   );
 }
 
@@ -190,7 +190,7 @@ export function Step2Form({ defaultValues, isPending, onSubmit, onBack }: Props)
           onClick={onBack}
           disabled={isPending}
           className={cn(
-            "flex-1 py-3 rounded-xl border border-slate-200 text-slate-600 font-medium hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2",
+            "flex-1 py-3 rounded-xl border border-zinc-200/50 text-zinc-600 font-medium hover:bg-zinc-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2",
             "transition-colors",
             "disabled:opacity-50 disabled:cursor-not-allowed"
           )}
@@ -201,7 +201,7 @@ export function Step2Form({ defaultValues, isPending, onSubmit, onBack }: Props)
           type="submit"
           disabled={isPending}
           className={cn(
-            "flex-1 py-3 rounded-xl bg-slate-900 text-white font-medium hover:bg-slate-800 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2",
+            "flex-1 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 text-white font-medium hover:from-emerald-500 hover:to-teal-400 hover:shadow-md hover:shadow-emerald-500/20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2",
             "disabled:opacity-50 disabled:cursor-not-allowed"
           )}
         >

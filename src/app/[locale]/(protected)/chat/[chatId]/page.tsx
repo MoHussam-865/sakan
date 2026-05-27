@@ -59,20 +59,20 @@ export default async function ChatThreadPage({ params }: ChatPageProps) {
   return (
     <section className="flex flex-col h-[calc(100vh-3.5rem)] w-full max-w-2xl mx-auto">
       {/* Thread header */}
-      <div className="flex items-center gap-4 px-4 py-4 border-b border-slate-200 bg-stone-50 shrink-0">
+      <div className="flex items-center gap-4 px-4 py-4 border-b border-zinc-200/60 bg-zinc-50 shrink-0">
         <Link
           href="/chat"
-          className="text-sm text-slate-500 hover:text-slate-900 transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2"
+          className="text-sm text-zinc-500 hover:text-zinc-900 transition-colors rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2"
           aria-label={t("common.back")}
         >
           ←
         </Link>
         {/* Avatar placeholder */}
         <div
-          className="w-9 h-9 rounded-full border-2 border-slate-200 shrink-0"
+          className="w-9 h-9 rounded-full border-2 border-zinc-200/60 shrink-0"
           aria-hidden="true"
         />
-        <h1 className="text-sm font-semibold text-slate-900 truncate">
+        <h1 className="text-sm font-semibold text-zinc-900 truncate">
           {partnerName}
         </h1>
       </div>

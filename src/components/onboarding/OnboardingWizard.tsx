@@ -135,7 +135,7 @@ export function OnboardingWizard({ existingProfile, existingPreferences }: Props
   }
 
   return (
-    <div className="w-full max-w-lg rounded-2xl border border-slate-200 bg-white divide-y divide-slate-100">
+    <div className="w-full max-w-lg rounded-2xl border border-zinc-200/60 bg-white divide-y divide-zinc-100">
       <div className="px-6 py-5">
         <StepProgressBar
           currentStep={step}
@@ -146,10 +146,10 @@ export function OnboardingWizard({ existingProfile, existingPreferences }: Props
       </div>
 
       <div className="px-6 py-6">
-        <p className="text-xs uppercase tracking-widest text-slate-500 mb-1">
+        <p className="text-xs uppercase tracking-widest text-zinc-500 mb-1">
           {t("step_of", { current: step, total: TOTAL_STEPS })}
         </p>
-        <h2 className="text-2xl font-semibold tracking-tight text-slate-900">
+        <h2 className="text-2xl font-semibold tracking-tight text-zinc-900">
           {stepLabels[step - 1]}
         </h2>
       </div>
@@ -157,7 +157,7 @@ export function OnboardingWizard({ existingProfile, existingPreferences }: Props
       <div className="px-6 py-6">
         {/* Server-level error */}
         {serverError && (
-          <p role="alert" className="text-sm text-red-600 mb-4">
+          <p role="alert" className="text-sm text-zinc-500 mb-4">
             {t(serverError as Parameters<typeof t>[0])}
           </p>
         )}

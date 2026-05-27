@@ -35,10 +35,10 @@ export default async function OnboardingPage() {
 
   return (
     <section className="w-full max-w-lg">
-      <h1 className="text-2xl font-semibold tracking-tight text-slate-900 mb-1">
+      <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 mb-1">
         {t("title")}
       </h1>
-      <p className="text-sm text-slate-500 mb-8">{t("subtitle")}</p>
+      <p className="text-sm text-zinc-500 mb-8">{t("subtitle")}</p>
 
       <OnboardingWizard
         existingProfile={profile}

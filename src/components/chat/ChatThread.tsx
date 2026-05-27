@@ -188,8 +188,8 @@ export default function ChatThread({
                 className={cn(
                   "max-w-xs lg:max-w-md px-4 py-2.5 rounded-2xl text-sm leading-relaxed break-words",
                   isOwn
-                    ? "bg-slate-900 text-white"
-                    : "bg-white border border-slate-200 text-slate-900"
+                    ? "bg-gradient-to-r from-emerald-600 to-teal-500 text-white"
+                    : "bg-white bg-gradient-to-br from-white to-zinc-50/50 border border-zinc-200/50 text-zinc-900"
                 )}
                 dir="auto"
               >
@@ -207,13 +207,13 @@ export default function ChatThread({
 
       {/* Error feedback */}
       {error && (
-        <p role="alert" className="px-4 pb-1 text-sm text-red-600">
+        <p role="alert" className="px-4 pb-1 text-sm text-zinc-500">
           {error}
         </p>
       )}
 
       {/* Message input bar */}
-      <div className="border-t border-slate-200 bg-white px-4 py-3">
+      <div className="border-t border-zinc-200/50 bg-white bg-gradient-to-br from-white to-zinc-50/50 px-4 py-3">
         <div className="flex gap-2 items-center">
           <label htmlFor="chat-input" className="sr-only">
             {tPlaceholder}
@@ -228,14 +228,14 @@ export default function ChatThread({
             placeholder={tPlaceholder}
             disabled={isSubmitting}
             autoComplete="off"
-            className="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 bg-transparent text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 focus-visible:ring-2 focus-visible:ring-offset-2 transition-all text-sm disabled:opacity-60"
+            className="flex-1 px-4 py-2.5 rounded-xl border border-zinc-200/50 bg-white bg-gradient-to-br from-white to-zinc-50/50 text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 focus-visible:ring-2 focus-visible:ring-offset-2 transition-all text-sm disabled:opacity-60"
           />
           <button
             type="button"
             onClick={() => void handleSend()}
             disabled={isSubmitting || !inputValue.trim()}
             aria-label={tSend}
-            className="px-5 py-2.5 rounded-xl bg-slate-900 text-white font-medium text-sm hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2"
+            className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 text-white font-medium text-sm hover:from-emerald-500 hover:to-teal-400 hover:shadow-md hover:shadow-emerald-500/20 disabled:opacity-40 disabled:cursor-not-allowed transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2"
           >
             {tSend}
           </button>

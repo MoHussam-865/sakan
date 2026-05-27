@@ -23,7 +23,7 @@ export default function LocaleSwitcher() {
             <li key={locale} className="flex items-center">
               {i > 0 && (
                 <span
-                  className="mx-2 text-slate-300 select-none"
+                  className="mx-2 text-zinc-300 select-none"
                   aria-hidden="true"
                 >
                   |
@@ -34,10 +34,10 @@ export default function LocaleSwitcher() {
                 locale={locale}
                 aria-current={isActive ? "page" : undefined}
                 className={cn(
-                  "text-xs font-medium tracking-wide uppercase transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2 focus-visible:ring-offset-stone-50",
+                  "text-xs font-medium tracking-wide uppercase transition-colors rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-50",
                   isActive
-                    ? "text-slate-900 cursor-default pointer-events-none"
-                    : "text-slate-500 hover:text-slate-900"
+                    ? "text-zinc-900 cursor-default pointer-events-none"
+                    : "text-zinc-500 hover:text-indigo-700 hover:shadow-md hover:shadow-indigo-500/10 transition-all"
                 )}
               >
                 {t(locale)}

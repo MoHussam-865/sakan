@@ -22,27 +22,27 @@ export default function MatchCard({ profile }: MatchCardProps) {
     <Link
       href={`/profile/${profile.id}`}
       className={cn(
-        "group flex flex-col p-5 rounded-2xl border border-slate-200 bg-white",
-        "hover:border-slate-300 hover:bg-slate-50 transition-all duration-150",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2"
+        "group flex flex-col p-5 rounded-2xl border border-zinc-200/60 bg-white",
+        "hover:border-indigo-500/30 hover:shadow-lg hover:shadow-indigo-500/10 hover:-translate-y-0.5 transition-all duration-300",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2"
       )}
     >
       {/* Avatar placeholder */}
       <div
-        className="w-10 h-10 rounded-full border-2 border-slate-200 mb-4 shrink-0"
+        className="w-10 h-10 rounded-full border-2 border-zinc-200/60 mb-4 shrink-0"
         aria-hidden="true"
       />
 
       {/* Name and age */}
-      <h3 className="font-medium text-slate-900 text-base leading-snug truncate">
+      <h3 className="font-medium text-zinc-900 text-base leading-snug truncate">
         {profile.name}
       </h3>
-      <p className="text-sm text-slate-500 mt-0.5">
+      <p className="text-sm text-zinc-500 mt-0.5">
         {t("profile.age", { age })}
       </p>
 
       {/* Location and education tags */}
-      <div className="mt-3 flex flex-wrap gap-x-3 gap-y-1 text-xs text-slate-500">
+      <div className="mt-3 flex flex-wrap gap-x-3 gap-y-1 text-xs text-zinc-500">
         {profile.city && <span>{profile.city}</span>}
         {profile.education_level && (
           <span>{t(`enums.education.${profile.education_level}`)}</span>
@@ -50,7 +50,7 @@ export default function MatchCard({ profile }: MatchCardProps) {
       </div>
 
       {/* CTA hint */}
-      <span className="mt-5 text-xs font-medium text-slate-500 group-hover:text-slate-900 transition-colors">
+      <span className="mt-5 text-xs font-medium text-zinc-500 group-hover:text-zinc-900 transition-colors">
         {t("dashboard.view_profile")} →
       </span>
     </Link>

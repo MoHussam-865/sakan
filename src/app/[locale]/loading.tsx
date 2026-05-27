@@ -10,7 +10,7 @@ export default async function Loading() {
       role="status"
       aria-label={tCommon("loading")}
     >
-      <div className="h-8 w-8 rounded-full border-2 border-slate-200 border-t-slate-600 animate-spin" />
+      <div className="h-8 w-8 rounded-full border-2 border-zinc-200/50 border-t-emerald-600 animate-spin" />
     </div>
   );
 }

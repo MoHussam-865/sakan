@@ -24,18 +24,18 @@ export default async function PreferencesPage() {
       {/* Back link */}
       <Link
         href="/dashboard"
-        className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-900 transition-colors mb-8 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2"
+        className="inline-flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-900 transition-colors mb-8 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2"
       >
         <span aria-hidden="true">←</span>
         {t("back_to_matches")}
       </Link>
 
       {/* Heading */}
-      <div className="pb-6 mb-8 border-b border-slate-200">
-        <h1 className="text-2xl font-semibold tracking-tight text-slate-900 mb-1">
+      <div className="pb-6 mb-8 border-b border-zinc-200/60">
+        <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 mb-1">
           {t("title")}
         </h1>
-        <p className="text-sm text-slate-500">{t("subtitle")}</p>
+        <p className="text-sm text-zinc-500">{t("subtitle")}</p>
       </div>
 
       <PreferencesForm

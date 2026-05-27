@@ -49,7 +49,7 @@ export default async function LocaleLayout({
       dir={dir}
       className={cn(geistSans.variable, "h-full antialiased")}
     >
-      <body className="min-h-full flex flex-col bg-[#FAFAFA] text-slate-900">
+      <body className="min-h-full flex flex-col bg-zinc-50 text-zinc-900">
         <NextIntlClientProvider messages={messages}>
           {children}
         </NextIntlClientProvider>

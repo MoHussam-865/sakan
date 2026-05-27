@@ -34,22 +34,22 @@ export default async function ProfileDetailPage({
       {/* Back link */}
       <Link
         href="/dashboard"
-        className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-900 transition-colors mb-8"
+        className="inline-flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-900 transition-colors mb-8"
       >
         ←<span>{t("profile.back_to_matches")}</span>
       </Link>
 
       {/* Header */}
-      <div className="flex items-center gap-5 pb-8 mb-8 border-b border-slate-200">
+      <div className="flex items-center gap-5 pb-8 mb-8 border-b border-zinc-200/60">
         <div
-          className="w-16 h-16 rounded-full border-2 border-slate-200 shrink-0"
+          className="w-16 h-16 rounded-full border-2 border-zinc-200/60 shrink-0"
           aria-hidden="true"
         />
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight text-slate-900">
+          <h1 className="text-2xl font-semibold tracking-tight text-zinc-900">
             {profile.name}
           </h1>
-          <p className="text-sm text-slate-500 mt-0.5">
+          <p className="text-sm text-zinc-500 mt-0.5">
             {t("profile.age", { age })}
           </p>
         </div>
@@ -57,15 +57,15 @@ export default async function ProfileDetailPage({
 
       {/* About me */}
       {profile.about_me && (
-        <div className="pb-8 mb-2 border-b border-slate-100">
-          <p className="text-slate-700 leading-relaxed text-sm">
+        <div className="pb-8 mb-2 border-b border-zinc-200/60">
+          <p className="text-zinc-700 leading-relaxed text-sm">
             {profile.about_me}
           </p>
         </div>
       )}
 
       {/* Detail fields */}
-      <dl className="divide-y divide-slate-100">
+      <dl className="divide-y divide-zinc-100">
         {profile.city && (
           <ProfileField
             label={t("onboarding.city_label")}
@@ -111,11 +111,11 @@ export default async function ProfileDetailPage({
       </dl>
 
       {/* Chat CTA */}
-      <div className="mt-10 pt-8 border-t border-slate-200">
+      <div className="mt-10 pt-8 border-t border-zinc-200/60">
         <form action={startChat.bind(null, profile.id)}>
           <button
             type="submit"
-            className="w-full py-3 px-6 rounded-xl bg-slate-900 text-white font-medium text-sm hover:bg-slate-800 transition-colors"
+            className="w-full py-3 px-6 rounded-xl bg-emerald-600 text-white font-medium text-sm hover:bg-emerald-700 transition-colors"
           >
             {t("dashboard.start_chat")}
           </button>
@@ -129,8 +129,8 @@ export default async function ProfileDetailPage({
 function ProfileField({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-start gap-4 py-3.5">
-      <dt className="text-sm text-slate-500 w-40 shrink-0">{label}</dt>
-      <dd className="text-sm text-slate-900">{value}</dd>
+      <dt className="text-sm text-zinc-500 w-40 shrink-0">{label}</dt>
+      <dd className="text-sm text-zinc-900">{value}</dd>
     </div>
   );
 }

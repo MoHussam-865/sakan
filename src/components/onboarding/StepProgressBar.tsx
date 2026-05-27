@@ -34,15 +34,15 @@ export function StepProgressBar({
                 className={cn(
                   "rounded-full flex-shrink-0 transition-all duration-300",
                   isCompleted && "h-2 w-2 bg-slate-700",
-                  isCurrent && "h-2.5 w-2.5 bg-slate-900",
-                  !isCompleted && !isCurrent && "h-2 w-2 bg-slate-200"
+                  isCurrent && "h-2.5 w-2.5 bg-emerald-600",
+                  !isCompleted && !isCurrent && "h-2 w-2 bg-zinc-200"
                 )}
               />
               {stepNum < totalSteps && (
                 <div
                   className={cn(
                     "h-px flex-1 mx-2 transition-all duration-300",
-                    isCompleted ? "bg-slate-700" : "bg-slate-200"
+                    isCompleted ? "bg-slate-700" : "bg-zinc-200"
                   )}
                 />
               )}
